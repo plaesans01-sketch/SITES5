@@ -118,39 +118,43 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 let currentPasteId = null;
 let pastes = [];
-function saveCurrentPaste() {
+async function saveCurrentPaste() {
             const title = document.getElementById('pasteTitle').value || 'Untitled';
             const content = document.getElementById('pasteContent').value;
             if (!content.trim()) return alert("Paste can't be empty");
-            
-            const paste = {
-                id: currentPasteId || 'p' + Date.now(),
-                title: title,
-                content: content,
-                created: currentPasteId ? pastes.find(p => p.id === currentPasteId).created : Date.now(),
-                edited: Date.now()
-            };
-            
-            if (currentPasteId) {
-                const idx = pastes.findIndex(p => p.id === currentPasteId);
-                if (idx !== -1) pastes[idx] = paste;
-            } else {
-                pastes.unshift(paste);
+            try {
+                const response = await fetch('/api/pastes', {
+                    method: 'POST',
+                    headers: {'Content-Type':'application/json'},
+                    credentials: 'same-origin',
+                    body: JSON.stringify({id: currentPasteId, title, content})
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'Save failed');
+                currentPasteId = result.id;
+                await loadPasteList();
+                openPaste(result.id);
+                copyText(result.raw);
+            } catch (error) {
+                alert('SAVE ERROR: ' + error.message);
             }
-            
-            localStorage.setItem('ironwallPastes', JSON.stringify(pastes));
-            currentPasteId = paste.id;
-            loadPasteList();
         }
-function deleteCurrentPaste() {
+async function deleteCurrentPaste() {
             if (!currentPasteId) return;
-            if (confirm("Delete this paste?")) {
-                pastes = pastes.filter(p => p.id !== currentPasteId);
-                localStorage.setItem('ironwallPastes', JSON.stringify(pastes));
+            if (!confirm("Delete this paste?")) return;
+            try {
+                const response = await fetch('/api/pastes/' + encodeURIComponent(currentPasteId), {
+                    method:'DELETE', credentials:'same-origin'
+                });
+                if (!response.ok) throw new Error('Delete failed');
                 currentPasteId = null;
                 document.getElementById('pasteContent').value = '';
                 document.getElementById('pasteTitle').value = '';
-                loadPasteList();
+                document.getElementById('pasteViewer').classList.add('hidden');
+                location.hash = '';
+                await loadPasteList();
+            } catch (error) {
+                alert('DELETE ERROR: ' + error.message);
             }
         }
 function createNewPaste() {
@@ -163,7 +167,7 @@ function escapeHTML(value) {
             return String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
         }
 function getPasteUrl(id, raw = false) {
-            return location.href.split('#')[0] + (raw ? '#/raw/' : '#/') + encodeURIComponent(id);
+            return location.origin + (raw ? '/raw/' : '/p/') + encodeURIComponent(id);
         }
 function copyText(value) {
             if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(value).then(() => alert('Copied'));
@@ -177,27 +181,38 @@ function copyText(value) {
                 alert('Copied');
             }
         }
-function loadPasteList() {
-            const saved = localStorage.getItem('ironwallPastes');
-            pastes = saved ? JSON.parse(saved) : [];
+async function loadPasteList() {
             const container = document.getElementById('pasteList');
-            container.innerHTML = pastes.map(p => `
-                <div class="terminal p-4 hover:border-white">
-                    <div class="flex flex-wrap justify-between items-center gap-3">
-                        <button onclick="openPaste('${encodeURIComponent(p.id)}')" class="text-left font-bold break-all">${escapeHTML(p.title)}</button>
-                        <span class="text-xs opacity-60">${new Date(p.created).toLocaleString()}</span>
-                    </div>
-                    <button onclick="openPaste('${encodeURIComponent(p.id)}')" class="block text-left w-full mt-2 text-sm opacity-70 break-words">${escapeHTML(p.content.substring(0,160))}${p.content.length > 160 ? '...' : ''}</button>
-                    <div class="flex flex-wrap gap-2 mt-4">
-                        <button onclick="openPaste('${encodeURIComponent(p.id)}')" class="px-3 py-2 border border-white/30 text-xs">VIEW</button>
-                        <button onclick="copyText(getPasteUrl('${encodeURIComponent(p.id)}',true))" class="px-3 py-2 border border-white/30 text-xs">COPY RAW URL</button>
-                    </div>
-                </div>`).join('');
+            container.innerHTML = '<div class="opacity-60 text-sm">LOADING...</div>';
+            try {
+                const response = await fetch('/api/pastes', {credentials:'same-origin'});
+                if (!response.ok) throw new Error('Unable to load pastes');
+                pastes = await response.json();
+                container.innerHTML = pastes.map(p => `
+                    <div class="terminal p-4 hover:border-white">
+                        <div class="flex flex-wrap justify-between items-center gap-3">
+                            <button onclick="openPaste('${p.id}')" class="text-left font-bold break-all">${escapeHTML(p.title)}</button>
+                            <span class="text-xs opacity-60">${new Date(p.created).toLocaleString()}</span>
+                        </div>
+                        <button onclick="openPaste('${p.id}')" class="block text-left w-full mt-2 text-sm opacity-70 break-words">${escapeHTML(p.content.substring(0,160))}${p.content.length > 160 ? '...' : ''}</button>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <button onclick="openPaste('${p.id}')" class="px-3 py-2 border border-white/30 text-xs">VIEW</button>
+                            <button onclick="copyText(getPasteUrl('${p.id}',true))" class="px-3 py-2 border border-white/30 text-xs">COPY RAW URL</button>
+                        </div>
+                    </div>`).join('') || '<div class="opacity-60 text-sm">NO PASTES</div>';
+            } catch (error) {
+                container.innerHTML = '<div class="text-sm">PASTE API UNAVAILABLE</div>';
+            }
+        }
+async function fetchPaste(id) {
+            const response = await fetch('/api/pastes/' + encodeURIComponent(id), {credentials:'same-origin'});
+            if (!response.ok) return null;
+            return await response.json();
         }
 function configureViewer(paste) {
             document.getElementById('viewerTitle').textContent = paste.title;
             document.getElementById('viewerCode').textContent = paste.content;
-            document.getElementById('viewerRaw').onclick = () => location.hash = '/raw/' + encodeURIComponent(paste.id);
+            document.getElementById('viewerRaw').onclick = () => location.href = getPasteUrl(paste.id,true);
             document.getElementById('viewerCopy').onclick = () => copyText(paste.content);
             document.getElementById('viewerEdit').onclick = () => {
                 currentPasteId = paste.id;
@@ -210,10 +225,10 @@ function configureViewer(paste) {
                 location.hash = '';
             };
         }
-function openPaste(id) {
+async function openPaste(id) {
             id = decodeURIComponent(id);
-            const paste = pastes.find(p => p.id === id);
-            if (!paste) return;
+            const paste = await fetchPaste(id);
+            if (!paste) return alert('PASTE NOT FOUND');
             currentPasteId = id;
             configureViewer(paste);
             document.getElementById('rawViewer').classList.add('hidden');
@@ -221,19 +236,13 @@ function openPaste(id) {
             history.replaceState(null,'',location.pathname + location.search + '#/' + encodeURIComponent(id));
             document.getElementById('pasteViewer').scrollIntoView({behavior:'smooth',block:'start'});
         }
-function renderRoute() {
+async function renderRoute() {
             const route = decodeURIComponent(location.hash.slice(1));
-            const raw = route.match(/^\/raw\/(.+)$/);
-            const view = route.match(/^\/(.+)$/);
+            const view = route.match(/^\\/(.+)$/);
             document.getElementById('pasteViewer').classList.add('hidden');
             document.getElementById('rawViewer').classList.add('hidden');
-            if (raw) {
-                const paste = pastes.find(p => p.id === raw[1]);
-                document.getElementById('rawCode').textContent = paste ? paste.content : 'Paste not found in this browser storage.';
-                document.getElementById('rawViewer').classList.remove('hidden');
-                document.getElementById('rawBack').onclick = () => paste ? openPaste(paste.id) : (location.hash = '');
-            } else if (view) {
-                const paste = pastes.find(p => p.id === view[1]);
+            if (view) {
+                const paste = await fetchPaste(view[1]);
                 if (paste) {
                     configureViewer(paste);
                     document.getElementById('pasteViewer').classList.remove('hidden');
