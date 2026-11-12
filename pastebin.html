@@ -74,6 +74,22 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;backg
                 </div>
             </div>
         </section>
+        <section id="pasteViewer" class="hidden mt-6 terminal p-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <div><div class="text-xs tracking-widest opacity-60">PASTE VIEW</div><h3 id="viewerTitle" class="text-xl font-bold mt-1"></h3></div>
+                <div class="flex flex-wrap gap-2">
+                    <button id="viewerRaw" class="px-4 py-2 border border-white/40 text-xs">RAW</button>
+                    <button id="viewerCopy" class="px-4 py-2 border border-white/40 text-xs">COPY</button>
+                    <button id="viewerEdit" class="px-4 py-2 bg-white text-black text-xs font-bold">EDIT</button>
+                    <button id="viewerClose" class="px-4 py-2 border border-white/40 text-xs">CLOSE</button>
+                </div>
+            </div>
+            <pre id="viewerCode" class="whitespace-pre-wrap break-words overflow-x-auto text-sm leading-6 p-4 border border-white/20 bg-black"></pre>
+        </section>
+        <section id="rawViewer" class="hidden mt-6 terminal p-6">
+            <div class="flex items-center justify-between gap-3 mb-4"><div class="text-xs tracking-widest opacity-60">RAW SOURCE</div><button id="rawBack" class="px-4 py-2 border border-white/40 text-xs">BACK</button></div>
+            <pre id="rawCode" class="whitespace-pre-wrap break-words overflow-x-auto text-sm leading-6"></pre>
+        </section>
 </main>
 <script>
 
@@ -143,29 +159,92 @@ function createNewPaste() {
             currentPasteId = null;
             document.getElementById('pasteContent').focus();
         }
+function escapeHTML(value) {
+            return String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+        }
+function getPasteUrl(id, raw = false) {
+            return location.href.split('#')[0] + (raw ? '#/raw/' : '#/') + encodeURIComponent(id);
+        }
+function copyText(value) {
+            if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(value).then(() => alert('Copied'));
+            else {
+                const field = document.createElement('textarea');
+                field.value = value;
+                document.body.appendChild(field);
+                field.select();
+                document.execCommand('copy');
+                field.remove();
+                alert('Copied');
+            }
+        }
 function loadPasteList() {
             const saved = localStorage.getItem('ironwallPastes');
             pastes = saved ? JSON.parse(saved) : [];
             const container = document.getElementById('pasteList');
             container.innerHTML = pastes.map(p => `
-                <div onclick="openPaste('${p.id}')" class="terminal p-4 cursor-pointer hover:border-[#e8e8e8]">
-                    <div class="flex justify-between">
-                        <span class="font-bold">${p.title}</span>
+                <div class="terminal p-4 hover:border-white">
+                    <div class="flex flex-wrap justify-between items-center gap-3">
+                        <button onclick="openPaste('${encodeURIComponent(p.id)}')" class="text-left font-bold break-all">${escapeHTML(p.title)}</button>
                         <span class="text-xs opacity-60">${new Date(p.created).toLocaleString()}</span>
                     </div>
-                    <div class="mt-2 text-sm opacity-70 truncate">${p.content.substring(0, 120)}...</div>
-                </div>
-            `).join('');
+                    <button onclick="openPaste('${encodeURIComponent(p.id)}')" class="block text-left w-full mt-2 text-sm opacity-70 break-words">${escapeHTML(p.content.substring(0,160))}${p.content.length > 160 ? '...' : ''}</button>
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <button onclick="openPaste('${encodeURIComponent(p.id)}')" class="px-3 py-2 border border-white/30 text-xs">VIEW</button>
+                        <button onclick="copyText(getPasteUrl('${encodeURIComponent(p.id)}',true))" class="px-3 py-2 border border-white/30 text-xs">COPY RAW URL</button>
+                    </div>
+                </div>`).join('');
+        }
+function configureViewer(paste) {
+            document.getElementById('viewerTitle').textContent = paste.title;
+            document.getElementById('viewerCode').textContent = paste.content;
+            document.getElementById('viewerRaw').onclick = () => location.hash = '/raw/' + encodeURIComponent(paste.id);
+            document.getElementById('viewerCopy').onclick = () => copyText(paste.content);
+            document.getElementById('viewerEdit').onclick = () => {
+                currentPasteId = paste.id;
+                document.getElementById('pasteTitle').value = paste.title;
+                document.getElementById('pasteContent').value = paste.content;
+                window.scrollTo({top:0,behavior:'smooth'});
+            };
+            document.getElementById('viewerClose').onclick = () => {
+                document.getElementById('pasteViewer').classList.add('hidden');
+                location.hash = '';
+            };
         }
 function openPaste(id) {
-            currentPasteId = id;
+            id = decodeURIComponent(id);
             const paste = pastes.find(p => p.id === id);
             if (!paste) return;
-            document.getElementById('pasteTitle').value = paste.title;
-            document.getElementById('pasteContent').value = paste.content;
+            currentPasteId = id;
+            configureViewer(paste);
+            document.getElementById('rawViewer').classList.add('hidden');
+            document.getElementById('pasteViewer').classList.remove('hidden');
+            history.replaceState(null,'',location.pathname + location.search + '#/' + encodeURIComponent(id));
+            document.getElementById('pasteViewer').scrollIntoView({behavior:'smooth',block:'start'});
         }
+function renderRoute() {
+            const route = decodeURIComponent(location.hash.slice(1));
+            const raw = route.match(/^\/raw\/(.+)$/);
+            const view = route.match(/^\/(.+)$/);
+            document.getElementById('pasteViewer').classList.add('hidden');
+            document.getElementById('rawViewer').classList.add('hidden');
+            if (raw) {
+                const paste = pastes.find(p => p.id === raw[1]);
+                document.getElementById('rawCode').textContent = paste ? paste.content : 'Paste not found in this browser storage.';
+                document.getElementById('rawViewer').classList.remove('hidden');
+                document.getElementById('rawBack').onclick = () => paste ? openPaste(paste.id) : (location.hash = '');
+            } else if (view) {
+                const paste = pastes.find(p => p.id === view[1]);
+                if (paste) {
+                    configureViewer(paste);
+                    document.getElementById('pasteViewer').classList.remove('hidden');
+                    currentPasteId = paste.id;
+                }
+            }
+        }
+window.addEventListener('hashchange', renderRoute);
 window.addEventListener('DOMContentLoaded', () => {
 loadPasteList();
+renderRoute();
 initParticles();
 animateParticles();
 });
