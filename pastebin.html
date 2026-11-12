@@ -1,226 +1,37 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRONWALL</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
-        
-        body {
-            margin: 0;
-            font-family: 'JetBrains Mono', monospace;
-            background: #050505;
-            color: #e8e8e8;
-        }
-        canvas#bgfx {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            width: 100%;
-            height: 100%;
-        }
-        .terminal {
-            background: #111111;
-            border: 1px solid #e8e8e8;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.12);
-        }
-        .neon-text {
-            text-shadow: 0 0 10px #e8e8e8, 0 0 20px #e8e8e8;
-        }
-        .nav-link {
-            transition: all 0.3s;
-        }
-        .nav-link.active {
-            color: #e8e8e8;
-            border-bottom: 3px solid #e8e8e8;
-        }
-        .pastebin-red {
-            background: #e63939;
-            color: white;
-            box-shadow: 0 0 15px #e63939;
-        }
-        .pastebin-red:hover {
-            background: #ff4d4d;
-        }
-    
-        :root{color-scheme:dark}
-        body{background:#050505!important;color:#ededed!important}
-        canvas#bgfx{z-index:0;pointer-events:none;opacity:.42}
-        header,#app{position:relative;z-index:1}
-        header{background:rgba(5,5,5,.88)!important;border-color:rgba(255,255,255,.18)!important}
-        .terminal{background:rgba(12,12,12,.88)!important;border:1px solid #555!important;box-shadow:0 0 24px rgba(255,255,255,.055)!important;border-radius:2px!important}
-        .neon-text{text-shadow:0 0 12px rgba(255,255,255,.28)!important}
-        .nav-link{color:#999;letter-spacing:.08em;text-transform:uppercase}
-        .nav-link:hover,.nav-link.active{color:#fff!important;border-color:#fff!important}
-        .pastebin-red,.pastebin-red:hover{background:#eee!important;color:#050505!important;box-shadow:0 0 18px rgba(255,255,255,.18)!important;border-radius:2px!important}
-        input,textarea{background:#050505!important;color:#eee!important;border-color:#555!important;border-radius:0!important}
-        input:focus,textarea:focus{border-color:#fff!important}
-        button{border-radius:2px!important;transition:background .2s,border-color .2s,transform .2s}
-        #bgfx{filter:grayscale(1)}
-        body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.018) 4px),radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,.72) 100%);mix-blend-mode:screen}
-        .tab-content{animation:fadeIn .35s ease}
-        @keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-        @media(max-width:900px){header>div{flex-wrap:wrap;gap:14px}header nav{order:3;width:100%;overflow-x:auto;padding-bottom:5px}.nav-link{white-space:nowrap}}
-
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRONWALL</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:#050505;color:#ededed;font-family:'JetBrains Mono',monospace}
+#bgfx{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.35;filter:grayscale(1)}
+header,#app{position:relative;z-index:1}
+header{background:rgba(5,5,5,.9);border-bottom:1px solid #292929;backdrop-filter:blur(10px)}
+.terminal{background:rgba(12,12,12,.9);border:1px solid #444;box-shadow:none;border-radius:2px}
+input,textarea{background:#050505!important;color:#eee!important;border-color:#555!important;border-radius:0!important}
+input:focus,textarea:focus{border-color:#fff!important;outline:none}
+button{border-radius:2px!important;transition:background .2s,border-color .2s}
+button:hover{transform:none}
+body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.012) 4px),radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,.65) 100%)}
+@media(max-width:900px){#pastebin .flex-col{flex-direction:column}}
+</style>
 </head>
-<body class="bg-[#050505] text-[#e8e8e8] font-mono">
-    <canvas id="bgfx"></canvas>
-
-    
-    <header class="fixed top-0 left-0 right-0 z-50 bg-[#050505]/80 backdrop-blur-lg border-b border-[#e8e8e8]/30">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <span class="text-3xl font-bold neon-text">IRONWALL</span>
-                <span class="text-xs text-[#e8e8e8]/60">RECON TERMINAL v4.0</span>
-            </div>
-            
-            <nav class="flex items-center gap-8 text-sm">
-                <a href="#" onclick="switchTab(0)" class="nav-link active text-black">Dashboard</a>
-                <a href="#" onclick="switchTab(1)" class="nav-link">Profiles</a>
-                <a href="#" onclick="switchTab(2)" class="nav-link">Friends</a>
-                <a href="#" onclick="switchTab(3)" class="nav-link">Games</a>
-                <a href="#" onclick="switchTab(4)" class="nav-link">Chat</a>
-                <a href="#" onclick="switchTab(5)" class="nav-link">Mod</a>
-                <a href="#" onclick="switchTab(6)" class="nav-link">Charts</a>
-                <a href="#" onclick="switchTab(7)" class="nav-link">Market</a>
-                <a href="#" onclick="switchTab(8)" class="nav-link">Pastebin</a>
-            </nav>
-
-            <div class="flex items-center gap-4">
-                <button onclick="showPastebinModal()" 
-                        class="pastebin-red px-6 py-2 rounded-md text-xs font-bold flex items-center gap-2 hover:scale-105 transition">
-                    <span>CREATE POST</span>
-                    <span class="text-lg"></span>
-                </button>
-                <button onclick="showPastebinModal()" 
-                        class="pastebin-red px-6 py-2 rounded-md text-xs font-bold flex items-center gap-2 hover:scale-105 transition">
-                    <span>PASTE</span>
-                    <span class="text-lg"></span>
-                </button>
-                
-                <div class="flex items-center gap-2">
-                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                    <span id="userStatus" class="text-xs">ONLINE</span>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    
-    <div id="app" class="pt-20 pb-8 max-w-7xl mx-auto px-6">
-
-        
-        <div id="tab-0" class="tab-content">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="terminal p-6 rounded-lg">
-                    <h2 class="text-xl mb-4 neon-text">Welcome back, Iron</h2>
-                    <p class="text-sm opacity-70">Last activity: 2 min ago</p>
-                </div>
-                <div class="terminal p-6 rounded-lg">
-                    <h2 class="text-xl mb-4 neon-text">Roblox Online</h2>
-                    <p class="text-sm opacity-70">12 487 players online</p>
-                </div>
-                <div class="terminal p-6 rounded-lg">
-                    <h2 class="text-xl mb-4 neon-text">Global Reputation</h2>
-                    <p class="text-sm opacity-70">+4 892</p>
-                </div>
-            </div>
-            <div class="mt-6 terminal p-6 rounded-lg">
-                <h3 class="text-lg mb-4">Recent Activity</h3>
-                <div id="activityFeed" class="space-y-3 text-sm"></div>
-            </div>
-        </div>
-
-        
-        <div id="tab-1" class="tab-content hidden">
-            <div class="flex gap-6">
-                <div class="w-64 terminal p-4 rounded-lg">
-                    <input id="profileSearch" type="text" placeholder="Search profiles..." 
-                           class="w-full bg-black border border-[#e8e8e8]/30 p-3 text-sm font-mono focus:outline-none focus:border-[#e8e8e8]"
-                           onkeyup="filterProfiles()">
-                    <div id="profileList" class="mt-4 space-y-2"></div>
-                </div>
-                <div class="flex-1 terminal p-6 rounded-lg">
-                    <div id="profileDetails" class="hidden">
-                        <h2 class="text-2xl mb-4" id="profileName"></h2>
-                        <div class="grid grid-cols-2 gap-6">
-                            <div>
-                                <p class="text-xs opacity-60">USERID</p>
-                                <p class="text-2xl font-bold" id="profileUserId"></p>
-                            </div>
-                            <div>
-                                <p class="text-xs opacity-60">PRESENCE</p>
-                                <p class="text-2xl font-bold" id="profilePresence"></p>
-                            </div>
-                        </div>
-                        <div class="mt-6 text-sm opacity-70" id="profileBio"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        
-        <div id="tab-2" class="tab-content hidden">
-            <h2 class="text-2xl mb-6 neon-text">FRIENDS</h2>
-            <div id="friendsList" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-        </div>
-
-        
-        <div id="tab-3" class="tab-content hidden">
-            <h2 class="text-2xl mb-6 neon-text">GAMES</h2>
-            <div id="gamesList" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-        </div>
-
-        
-        <div id="tab-4" class="tab-content hidden">
-            <div class="flex h-[600px] border border-[#e8e8e8]/30 rounded-lg overflow-hidden">
-                <div class="w-60 border-r border-[#e8e8e8]/30 p-4 flex flex-col">
-                    <input id="chatSearch" type="text" placeholder="Search channels..." 
-                           class="bg-black border border-[#e8e8e8]/30 p-3 text-sm mb-4"
-                           onkeyup="filterChats()">
-                    <div id="chatChannels" class="space-y-1 flex-1 overflow-auto"></div>
-                </div>
-                <div class="flex-1 flex flex-col">
-                    <div id="chatHeader" class="p-4 border-b border-[#e8e8e8]/30 font-bold text-sm">GENERAL</div>
-                    <div id="chatMessages" class="flex-1 p-4 overflow-auto bg-black text-sm space-y-2"></div>
-                    <div class="p-4 border-t border-[#e8e8e8]/30 flex">
-                        <input id="chatInput" type="text" placeholder="Type a message..." 
-                               class="flex-1 bg-black border border-[#e8e8e8]/30 p-3 text-sm focus:outline-none"
-                               onkeypress="if(event.key==='Enter') sendChatMessage()">
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        
-        <div id="tab-5" class="tab-content hidden">
-            <h2 class="text-2xl mb-6 neon-text">MODERATION LOG</h2>
-            <div id="modLog" class="space-y-3"></div>
-        </div>
-
-        
-        <div id="tab-6" class="tab-content hidden">
-            <h2 class="text-2xl mb-6 neon-text">ANALYTICS</h2>
-            <div class="terminal p-6 rounded-lg">
-                <canvas id="statsChart" class="w-full h-80"></canvas>
-            </div>
-        </div>
-
-        
-        <div id="tab-7" class="tab-content hidden">
-            <h2 class="text-2xl mb-6 neon-text">MARKETPLACE</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="marketItems">
-                
-            </div>
-        </div>
-
-        
-        <div id="tab-8" class="tab-content hidden">
+<body>
+<canvas id="bgfx"></canvas>
+<header class="fixed top-0 left-0 right-0 z-50">
+<div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+<span class="text-3xl font-bold tracking-widest">IRONWALL</span>
+<span class="text-xs tracking-widest text-white/60">ONLINE</span>
+</div>
+</header>
+<main id="app" class="pt-28 pb-10 max-w-7xl mx-auto px-6">
+<section id="pastebin" class="tab-content">
             <div class="flex flex-col lg:flex-row gap-6">
                 
                 <div class="lg:w-2/3">
@@ -236,97 +47,49 @@
                         <h3 class="font-bold">New Paste</h3>
                         <div class="flex gap-2">
                             <button onclick="createNewPaste()" 
-                                    class="px-4 py-1 bg-[#e8e8e8] text-black text-xs font-bold rounded">NEW</button>
+                                    class="px-4 py-1 bg-white text-black text-xs font-bold rounded">NEW</button>
                         </div>
                     </div>
                     
                     <textarea id="pasteContent" rows="12"
-                        class="w-full bg-black text-[#e8e8e8] font-mono text-sm p-4 border border-[#e8e8e8]/30 focus:outline-none focus:border-[#e8e8e8] resize-none"
+                        class="w-full bg-black text-white font-mono text-sm p-4 border border-white/20 focus:outline-none focus:border-white resize-none"
                         placeholder="Write your paste here..."></textarea>
                     
                     <div class="flex gap-3 mt-4">
                         <button onclick="saveCurrentPaste()" 
-                                class="flex-1 py-3 bg-[#e8e8e8] text-black font-bold text-sm rounded hover:bg-white transition">
+                                class="flex-1 py-3 bg-white text-black font-bold text-sm rounded hover:bg-white transition">
                             SAVE
                         </button>
                         <button onclick="deleteCurrentPaste()" 
-                                class="flex-1 py-3 bg-red-600 text-black font-bold text-sm rounded hover:bg-red-700 transition">
+                                class="flex-1 py-3 bg-white text-black font-bold text-sm rounded hover:bg-red-700 transition">
                             DELETE
                         </button>
                     </div>
                     
                     <div class="mt-6">
                         <input id="pasteTitle" type="text" 
-                            class="w-full bg-black border border-[#e8e8e8]/30 p-3 text-sm font-mono focus:outline-none focus:border-[#e8e8e8]"
+                            class="w-full bg-black border border-white/20 p-3 text-sm font-mono focus:outline-none focus:border-white"
                             placeholder="Post title (optional)">
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+</main>
+<script>
 
-    
-    <div id="pasteModal" onclick="if(event.target.id==='pasteModal') hidePasteModal()" 
-         class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[999]">
-        <div onclick="event.stopImmediatePropagation()" 
-             class="terminal w-full max-w-2xl mx-4 p-8 rounded-xl">
-            <h2 class="text-2xl mb-6">Create New Post</h2>
-            
-            <input id="modalTitle" type="text" placeholder="Post title..." 
-                   class="w-full bg-black border border-[#e8e8e8]/30 p-4 mb-6 text-lg font-mono focus:outline-none">
-            
-            <textarea id="modalContent" rows="15" 
-                class="w-full bg-black border border-[#e8e8e8]/30 p-6 font-mono text-sm resize-none focus:outline-none"
-                placeholder="Write your paste..."></textarea>
-            
-            <div class="flex gap-4 mt-8">
-                <button onclick="hidePasteModal()" 
-                        class="flex-1 py-4 border border-[#e8e8e8] text-sm font-bold">CANCEL</button>
-                <button onclick="createModalPaste()" 
-                        class="flex-1 py-4 bg-[#e8e8e8] text-black text-sm font-bold">CREATE POST</button>
-            </div>
-        </div>
-    </div>
+const canvas = document.getElementById('bgfx');
+const ctx = canvas.getContext('2d');
+let particles = [];
+function resizeCanvas() {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+}
 
-    <script>
-        const canvas = document.getElementById('bgfx');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-                this.hue = 0;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-            }
-            draw() {
-                ctx.fillStyle = `rgba(255,255,255,.7)`;
-                ctx.fillRect(this.x, this.y, this.size, this.size);
-            }
-        }
-
-        function initParticles() {
+function initParticles() {
             particles = [];
             for (let i = 0; i < 120; i++) particles.push(new Particle());
         }
-
-        function animateParticles() {
+function animateParticles() {
             ctx.fillStyle = 'rgba(10, 10, 10, 0.12)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => {
@@ -335,202 +98,11 @@
             });
             requestAnimationFrame(animateParticles);
         }
-        let currentTab = 0;
-        function switchTab(n) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`tab-${n}`).classList.remove('hidden');
-            document.querySelectorAll('nav a').forEach((a, i) => {
-                a.classList.toggle('active', i === n);
-            });
-            currentTab = n;
-        }
-        function updateUserStatus() {
-            document.getElementById('userStatus').textContent = Math.random() > 0.5 ? 'ONLINE' : 'BUSY';
-        }
-        setInterval(updateUserStatus, 3000);
-        function populateActivityFeed() {
-            const feed = document.getElementById('activityFeed');
-            const activities = [
-                "Iron joined server 'Tycoons Tycoon'",
-                "Iron was banned from 'Adopt Me'",
-                "Iron won 2nd place in Obby Royale",
-                "Iron upgraded to VIP rank"
-            ];
-            feed.innerHTML = activities.map(a => `<p class="flex gap-2"><span class="text-[#e8e8e8]">•</span> ${a}</p>`).join('');
-        }
-        function populateProfiles() {
-            const profiles = [
-                {id: 123456, name: "IronWolf", presence: "Playing", bio: "Roblox developer • Level 420"},
-                {id: 789012, name: "ShadowByte", presence: "AFK", bio: "No profile pic lol"},
-                {id: 111222, name: "NeonGhost", presence: "Playing", bio: "Hacker vibes"}
-            ];
-            const container = document.getElementById('profileList');
-            container.innerHTML = profiles.map(p => `
-                <div onclick="showProfileDetails(${p.id})" class="terminal p-3 text-sm cursor-pointer hover:bg-[#1a1a1a]">
-                    ${p.name} • ${p.presence}
-                </div>
-            `).join('');
-        }
-
-        function showProfileDetails(id) {
-            const details = document.getElementById('profileDetails');
-            details.classList.remove('hidden');
-            details.innerHTML = `
-                <h2 class="text-2xl mb-4" id="profileName">IronWolf</h2>
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <p class="text-xs opacity-60">USERID</p>
-                        <p class="text-2xl font-bold">123456</p>
-                    </div>
-                    <div>
-                        <p class="text-xs opacity-60">PRESENCE</p>
-                        <p class="text-2xl font-bold">Playing Tycoons Tycoon</p>
-                    </div>
-                </div>
-                <div class="mt-6 text-sm opacity-70">Roblox developer • Level 420</div>
-            `;
-        }
-        function populateFriends() {
-            const friends = document.getElementById('friendsList');
-            const list = [];
-            for (let i = 0; i < 8; i++) {
-                list.push(`
-                    <div class="terminal p-4 text-center">
-                        <div class="w-20 h-20 mx-auto bg-[#e8e8e8]/10 rounded-full mb-3"></div>
-                        <p class="text-sm">Friend_${i}</p>
-                    </div>
-                `);
-            }
-            friends.innerHTML = list.join('');
-        }
-        function populateGames() {
-            const games = document.getElementById('gamesList');
-            const list = [];
-            for (let i = 0; i < 12; i++) {
-                list.push(`
-                    <div class="terminal p-4 text-center cursor-pointer hover:border-[#e8e8e8]">
-                        <div class="text-4xl mb-3"></div>
-                        <p class="text-sm">Game ${i}</p>
-                    </div>
-                `);
-            }
-            games.innerHTML = list.join('');
-        }
-        function populateChatChannels() {
-            const channels = document.getElementById('chatChannels');
-            channels.innerHTML = `
-                <div class="p-3 text-xs opacity-60">CHANNELS</div>
-                <div onclick="switchChatChannel(this)" class="p-3 hover:bg-[#1a1a1a] cursor-pointer">general</div>
-                <div onclick="switchChatChannel(this)" class="p-3 hover:bg-[#1a1a1a] cursor-pointer">ironclan</div>
-                <div onclick="switchChatChannel(this)" class="p-3 hover:bg-[#1a1a1a] cursor-pointer">roblox-hq</div>
-            `;
-        }
-
-        let currentChatChannel = "general";
-        function switchChatChannel(el) {
-            document.querySelectorAll('#chatChannels div').forEach(d => d.style.background = 'transparent');
-            el.style.background = '#1a1a1a';
-            currentChatChannel = el.textContent.trim();
-            document.getElementById('chatHeader').textContent = currentChatChannel.toUpperCase();
-            populateChatMessages();
-        }
-
-        function populateChatMessages() {
-            const msgs = document.getElementById('chatMessages');
-            const messages = [
-                {user: "NeonGhost", text: "yo iron you playing?"},
-                {user: "IronWolf", text: "yep just grinding"},
-                {user: "ShadowByte", text: "anyone want to join my game?"}
-            ];
-            msgs.innerHTML = messages.map(m => `
-                <div class="flex gap-2">
-                    <span class="text-[#e8e8e8]">${m.user}:</span>
-                    <span>${m.text}</span>
-                </div>
-            `).join('');
-            msgs.scrollTop = msgs.scrollHeight;
-        }
-
-        function sendChatMessage() {
-            const input = document.getElementById('chatInput');
-            if (!input.value.trim()) return;
-            const msgs = document.getElementById('chatMessages');
-            msgs.innerHTML += `<div class="flex gap-2"><span class="text-[#e8e8e8]">You:</span> ${input.value}</div>`;
-            msgs.scrollTop = msgs.scrollHeight;
-            input.value = '';
-        }
-        function populateModLog() {
-            const log = document.getElementById('modLog');
-            const entries = [
-                "Iron banned user 987654",
-                "Iron warned user 123321",
-                "Iron deleted 12 posts"
-            ];
-            log.innerHTML = entries.map(e => `<div class="terminal p-3 text-sm">${e}</div>`).join('');
-        }
-        function initChart() {
-            const ctx = document.getElementById('statsChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-                    datasets: [{
-                        label: 'Activity',
-                        data: [1200, 1800, 900, 2200, 1400, 1900],
-                        borderColor: '#e8e8e8',
-                        tension: 0.4
-                    }]
-                },
-                options: { plugins: { legend: { display: false } } }
-            });
-        }
-        function populateMarket() {
-            const items = document.getElementById('marketItems');
-            const list = [];
-            for (let i = 0; i < 8; i++) {
-                list.push(`
-                    <div class="terminal p-4 text-center">
-                        <div class="text-5xl mb-3"></div>
-                        <p class="text-sm">Item ${i}</p>
-                        <p class="text-xs opacity-60 mt-1">999 Robux</p>
-                    </div>
-                `);
-            }
-            items.innerHTML = list.join('');
-        }
-        let currentPasteId = null;
-        let pastes = [];
-
-        function showPastebinModal() {
-            document.getElementById('pasteModal').classList.remove('hidden');
-            document.getElementById('modalTitle').focus();
-        }
-        
-        function hidePasteModal() {
-            document.getElementById('pasteModal').classList.add('hidden');
-        }
-        
-        function createModalPaste() {
-            const title = document.getElementById('modalTitle').value || 'Untitled';
-            const content = document.getElementById('modalContent').value;
-            if (!content.trim()) return alert("Paste can't be empty");
-            
-            const newPaste = {
-                id: 'p' + Date.now(),
-                title: title,
-                content: content,
-                created: Date.now(),
-                edited: Date.now()
-            };
-            
-            pastes.unshift(newPaste);
-            localStorage.setItem('ironwallPastes', JSON.stringify(pastes));
-            
-            hidePasteModal();
-            loadPasteList();
-        }
-        
-        function saveCurrentPaste() {
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+let currentPasteId = null;
+let pastes = [];
+function saveCurrentPaste() {
             const title = document.getElementById('pasteTitle').value || 'Untitled';
             const content = document.getElementById('pasteContent').value;
             if (!content.trim()) return alert("Paste can't be empty");
@@ -554,8 +126,7 @@
             currentPasteId = paste.id;
             loadPasteList();
         }
-        
-        function deleteCurrentPaste() {
+function deleteCurrentPaste() {
             if (!currentPasteId) return;
             if (confirm("Delete this paste?")) {
                 pastes = pastes.filter(p => p.id !== currentPasteId);
@@ -566,15 +137,13 @@
                 loadPasteList();
             }
         }
-        
-        function createNewPaste() {
+function createNewPaste() {
             document.getElementById('pasteContent').value = '';
             document.getElementById('pasteTitle').value = '';
             currentPasteId = null;
             document.getElementById('pasteContent').focus();
         }
-        
-        function loadPasteList() {
+function loadPasteList() {
             const saved = localStorage.getItem('ironwallPastes');
             pastes = saved ? JSON.parse(saved) : [];
             const container = document.getElementById('pasteList');
@@ -588,32 +157,19 @@
                 </div>
             `).join('');
         }
-        
-        function openPaste(id) {
+function openPaste(id) {
             currentPasteId = id;
             const paste = pastes.find(p => p.id === id);
             if (!paste) return;
             document.getElementById('pasteTitle').value = paste.title;
             document.getElementById('pasteContent').value = paste.content;
         }
-        window.onload = () => {
-            switchTab(0);
-            populateActivityFeed();
-            populateProfiles();
-            populateFriends();
-            populateGames();
-            populateChatChannels();
-            populateModLog();
-            initChart();
-            populateMarket();
-            loadPasteList();
-            initParticles();
-            animateParticles();
-            setInterval(() => {
-                const feed = document.getElementById('activityFeed');
-                feed.innerHTML = feed.innerHTML + `<p class="flex gap-2"><span class="text-[#e8e8e8]">•</span> Random event</p>`;
-            }, 8000);
-        };
-    </script>
+window.addEventListener('DOMContentLoaded', () => {
+loadPasteList();
+initParticles();
+animateParticles();
+});
+
+</script>
 </body>
 </html>
