@@ -11,8 +11,8 @@
         body {
             margin: 0;
             font-family: 'JetBrains Mono', monospace;
-            background: #0a0a0a;
-            color: #00ff9d;
+            background: #050505;
+            color: #e8e8e8;
         }
         canvas#bgfx {
             position: fixed;
@@ -24,18 +24,18 @@
         }
         .terminal {
             background: #111111;
-            border: 1px solid #00ff9d;
-            box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+            border: 1px solid #e8e8e8;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.12);
         }
         .neon-text {
-            text-shadow: 0 0 10px #00ff9d, 0 0 20px #00ff9d;
+            text-shadow: 0 0 10px #e8e8e8, 0 0 20px #e8e8e8;
         }
         .nav-link {
             transition: all 0.3s;
         }
         .nav-link.active {
-            color: #00ff9d;
-            border-bottom: 3px solid #00ff9d;
+            color: #e8e8e8;
+            border-bottom: 3px solid #e8e8e8;
         }
         .pastebin-red {
             background: #e63939;
@@ -45,21 +45,41 @@
         .pastebin-red:hover {
             background: #ff4d4d;
         }
+    
+        :root{color-scheme:dark}
+        body{background:#050505!important;color:#ededed!important}
+        canvas#bgfx{z-index:0;pointer-events:none;opacity:.42}
+        header,#app{position:relative;z-index:1}
+        header{background:rgba(5,5,5,.88)!important;border-color:rgba(255,255,255,.18)!important}
+        .terminal{background:rgba(12,12,12,.88)!important;border:1px solid #555!important;box-shadow:0 0 24px rgba(255,255,255,.055)!important;border-radius:2px!important}
+        .neon-text{text-shadow:0 0 12px rgba(255,255,255,.28)!important}
+        .nav-link{color:#999;letter-spacing:.08em;text-transform:uppercase}
+        .nav-link:hover,.nav-link.active{color:#fff!important;border-color:#fff!important}
+        .pastebin-red,.pastebin-red:hover{background:#eee!important;color:#050505!important;box-shadow:0 0 18px rgba(255,255,255,.18)!important;border-radius:2px!important}
+        input,textarea{background:#050505!important;color:#eee!important;border-color:#555!important;border-radius:0!important}
+        input:focus,textarea:focus{border-color:#fff!important}
+        button{border-radius:2px!important;transition:background .2s,border-color .2s,transform .2s}
+        #bgfx{filter:grayscale(1)}
+        body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.018) 4px),radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,.72) 100%);mix-blend-mode:screen}
+        .tab-content{animation:fadeIn .35s ease}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+        @media(max-width:900px){header>div{flex-wrap:wrap;gap:14px}header nav{order:3;width:100%;overflow-x:auto;padding-bottom:5px}.nav-link{white-space:nowrap}}
+
     </style>
 </head>
-<body class="bg-[#0a0a0a] text-[#00ff9d] font-mono">
+<body class="bg-[#050505] text-[#e8e8e8] font-mono">
     <canvas id="bgfx"></canvas>
 
-    <!-- HEADER -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-lg border-b border-[#00ff9d]/30">
+    
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#050505]/80 backdrop-blur-lg border-b border-[#e8e8e8]/30">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <span class="text-3xl font-bold neon-text">IRONWALL</span>
-                <span class="text-xs text-[#00ff9d]/60">RECON TERMINAL v4.0</span>
+                <span class="text-xs text-[#e8e8e8]/60">RECON TERMINAL v4.0</span>
             </div>
             
             <nav class="flex items-center gap-8 text-sm">
-                <a href="#" onclick="switchTab(0)" class="nav-link active text-white">Dashboard</a>
+                <a href="#" onclick="switchTab(0)" class="nav-link active text-black">Dashboard</a>
                 <a href="#" onclick="switchTab(1)" class="nav-link">Profiles</a>
                 <a href="#" onclick="switchTab(2)" class="nav-link">Friends</a>
                 <a href="#" onclick="switchTab(3)" class="nav-link">Games</a>
@@ -74,12 +94,12 @@
                 <button onclick="showPastebinModal()" 
                         class="pastebin-red px-6 py-2 rounded-md text-xs font-bold flex items-center gap-2 hover:scale-105 transition">
                     <span>CREATE POST</span>
-                    <span class="text-lg">📝</span>
+                    <span class="text-lg"></span>
                 </button>
                 <button onclick="showPastebinModal()" 
                         class="pastebin-red px-6 py-2 rounded-md text-xs font-bold flex items-center gap-2 hover:scale-105 transition">
                     <span>PASTE</span>
-                    <span class="text-lg">📋</span>
+                    <span class="text-lg"></span>
                 </button>
                 
                 <div class="flex items-center gap-2">
@@ -90,10 +110,10 @@
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
+    
     <div id="app" class="pt-20 pb-8 max-w-7xl mx-auto px-6">
 
-        <!-- TAB 0: DASHBOARD -->
+        
         <div id="tab-0" class="tab-content">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="terminal p-6 rounded-lg">
@@ -115,12 +135,12 @@
             </div>
         </div>
 
-        <!-- TAB 1: PROFILES -->
+        
         <div id="tab-1" class="tab-content hidden">
             <div class="flex gap-6">
                 <div class="w-64 terminal p-4 rounded-lg">
                     <input id="profileSearch" type="text" placeholder="Search profiles..." 
-                           class="w-full bg-black border border-[#00ff9d]/30 p-3 text-sm font-mono focus:outline-none focus:border-[#00ff9d]"
+                           class="w-full bg-black border border-[#e8e8e8]/30 p-3 text-sm font-mono focus:outline-none focus:border-[#e8e8e8]"
                            onkeyup="filterProfiles()">
                     <div id="profileList" class="mt-4 space-y-2"></div>
                 </div>
@@ -143,48 +163,47 @@
             </div>
         </div>
 
-        <!-- TAB 2: FRIENDS -->
+        
         <div id="tab-2" class="tab-content hidden">
             <h2 class="text-2xl mb-6 neon-text">FRIENDS</h2>
             <div id="friendsList" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
         </div>
 
-        <!-- TAB 3: GAMES -->
+        
         <div id="tab-3" class="tab-content hidden">
             <h2 class="text-2xl mb-6 neon-text">GAMES</h2>
             <div id="gamesList" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
         </div>
 
-        <!-- TAB 4: CHAT -->
+        
         <div id="tab-4" class="tab-content hidden">
-            <div class="flex h-[600px] border border-[#00ff9d]/30 rounded-lg overflow-hidden">
-                <div class="w-60 border-r border-[#00ff9d]/30 p-4 flex flex-col">
+            <div class="flex h-[600px] border border-[#e8e8e8]/30 rounded-lg overflow-hidden">
+                <div class="w-60 border-r border-[#e8e8e8]/30 p-4 flex flex-col">
                     <input id="chatSearch" type="text" placeholder="Search channels..." 
-                           class="bg-black border border-[#00ff9d]/30 p-3 text-sm mb-4"
+                           class="bg-black border border-[#e8e8e8]/30 p-3 text-sm mb-4"
                            onkeyup="filterChats()">
                     <div id="chatChannels" class="space-y-1 flex-1 overflow-auto"></div>
                 </div>
                 <div class="flex-1 flex flex-col">
-                    <div id="chatHeader" class="p-4 border-b border-[#00ff9d]/30 font-bold text-sm">GENERAL</div>
+                    <div id="chatHeader" class="p-4 border-b border-[#e8e8e8]/30 font-bold text-sm">GENERAL</div>
                     <div id="chatMessages" class="flex-1 p-4 overflow-auto bg-black text-sm space-y-2"></div>
-                    <div class="p-4 border-t border-[#00ff9d]/30 flex">
+                    <div class="p-4 border-t border-[#e8e8e8]/30 flex">
                         <input id="chatInput" type="text" placeholder="Type a message..." 
-                               class="flex-1 bg-black border border-[#00ff9d]/30 p-3 text-sm focus:outline-none"
+                               class="flex-1 bg-black border border-[#e8e8e8]/30 p-3 text-sm focus:outline-none"
                                onkeypress="if(event.key==='Enter') sendChatMessage()">
-                        <button onclick="sendChatMessage()" 
-                                class="ml-3 px-6 bg-[#00ff9d] text-black font-bold">SEND</button>
+                        
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 5: MOD -->
+        
         <div id="tab-5" class="tab-content hidden">
             <h2 class="text-2xl mb-6 neon-text">MODERATION LOG</h2>
             <div id="modLog" class="space-y-3"></div>
         </div>
 
-        <!-- TAB 6: CHARTS -->
+        
         <div id="tab-6" class="tab-content hidden">
             <h2 class="text-2xl mb-6 neon-text">ANALYTICS</h2>
             <div class="terminal p-6 rounded-lg">
@@ -192,18 +211,18 @@
             </div>
         </div>
 
-        <!-- TAB 7: MARKET -->
+        
         <div id="tab-7" class="tab-content hidden">
             <h2 class="text-2xl mb-6 neon-text">MARKETPLACE</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="marketItems">
-                <!-- populated by JS -->
+                
             </div>
         </div>
 
-        <!-- TAB 8: PASTEBIN -->
+        
         <div id="tab-8" class="tab-content hidden">
             <div class="flex flex-col lg:flex-row gap-6">
-                <!-- LIST -->
+                
                 <div class="lg:w-2/3">
                     <h2 class="text-2xl mb-6 flex items-center gap-3">
                         <span>PASTEBIN • RECENT POSTS</span>
@@ -211,34 +230,34 @@
                     <div id="pasteList" class="space-y-4"></div>
                 </div>
 
-                <!-- EDITOR -->
+                
                 <div class="lg:w-1/3 terminal p-6 rounded-lg flex flex-col">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="font-bold">New Paste</h3>
                         <div class="flex gap-2">
                             <button onclick="createNewPaste()" 
-                                    class="px-4 py-1 bg-[#00ff9d] text-black text-xs font-bold rounded">NEW</button>
+                                    class="px-4 py-1 bg-[#e8e8e8] text-black text-xs font-bold rounded">NEW</button>
                         </div>
                     </div>
                     
                     <textarea id="pasteContent" rows="12"
-                        class="w-full bg-black text-[#00ff9d] font-mono text-sm p-4 border border-[#00ff9d]/30 focus:outline-none focus:border-[#00ff9d] resize-none"
+                        class="w-full bg-black text-[#e8e8e8] font-mono text-sm p-4 border border-[#e8e8e8]/30 focus:outline-none focus:border-[#e8e8e8] resize-none"
                         placeholder="Write your paste here..."></textarea>
                     
                     <div class="flex gap-3 mt-4">
                         <button onclick="saveCurrentPaste()" 
-                                class="flex-1 py-3 bg-[#00ff9d] text-black font-bold text-sm rounded hover:bg-white transition">
+                                class="flex-1 py-3 bg-[#e8e8e8] text-black font-bold text-sm rounded hover:bg-white transition">
                             SAVE
                         </button>
                         <button onclick="deleteCurrentPaste()" 
-                                class="flex-1 py-3 bg-red-600 text-white font-bold text-sm rounded hover:bg-red-700 transition">
+                                class="flex-1 py-3 bg-red-600 text-black font-bold text-sm rounded hover:bg-red-700 transition">
                             DELETE
                         </button>
                     </div>
                     
                     <div class="mt-6">
                         <input id="pasteTitle" type="text" 
-                            class="w-full bg-black border border-[#00ff9d]/30 p-3 text-sm font-mono focus:outline-none focus:border-[#00ff9d]"
+                            class="w-full bg-black border border-[#e8e8e8]/30 p-3 text-sm font-mono focus:outline-none focus:border-[#e8e8e8]"
                             placeholder="Post title (optional)">
                     </div>
                 </div>
@@ -246,7 +265,7 @@
         </div>
     </div>
 
-    <!-- PASTEBIN MODAL -->
+    
     <div id="pasteModal" onclick="if(event.target.id==='pasteModal') hidePasteModal()" 
          class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[999]">
         <div onclick="event.stopImmediatePropagation()" 
@@ -254,24 +273,22 @@
             <h2 class="text-2xl mb-6">Create New Post</h2>
             
             <input id="modalTitle" type="text" placeholder="Post title..." 
-                   class="w-full bg-black border border-[#00ff9d]/30 p-4 mb-6 text-lg font-mono focus:outline-none">
+                   class="w-full bg-black border border-[#e8e8e8]/30 p-4 mb-6 text-lg font-mono focus:outline-none">
             
             <textarea id="modalContent" rows="15" 
-                class="w-full bg-black border border-[#00ff9d]/30 p-6 font-mono text-sm resize-none focus:outline-none"
+                class="w-full bg-black border border-[#e8e8e8]/30 p-6 font-mono text-sm resize-none focus:outline-none"
                 placeholder="Write your paste..."></textarea>
             
             <div class="flex gap-4 mt-8">
                 <button onclick="hidePasteModal()" 
-                        class="flex-1 py-4 border border-[#00ff9d] text-sm font-bold">CANCEL</button>
+                        class="flex-1 py-4 border border-[#e8e8e8] text-sm font-bold">CANCEL</button>
                 <button onclick="createModalPaste()" 
-                        class="flex-1 py-4 bg-[#00ff9d] text-black text-sm font-bold">CREATE POST</button>
+                        class="flex-1 py-4 bg-[#e8e8e8] text-black text-sm font-bold">CREATE POST</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ====================== ALL ORIGINAL JS (Roblox, particles, chat, charts, everything) ======================
-        // Canvas particles
         const canvas = document.getElementById('bgfx');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -290,7 +307,7 @@
                 this.size = Math.random() * 3 + 1;
                 this.speedX = Math.random() * 0.5 - 0.25;
                 this.speedY = Math.random() * 0.5 - 0.25;
-                this.hue = Math.random() * 80 + 140;
+                this.hue = 0;
             }
             update() {
                 this.x += this.speedX;
@@ -299,7 +316,7 @@
                 if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
             }
             draw() {
-                ctx.fillStyle = `hsl(${this.hue}, 100%, 70%)`;
+                ctx.fillStyle = `rgba(255,255,255,.7)`;
                 ctx.fillRect(this.x, this.y, this.size, this.size);
             }
         }
@@ -318,8 +335,6 @@
             });
             requestAnimationFrame(animateParticles);
         }
-
-        // Tabs
         let currentTab = 0;
         function switchTab(n) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -329,14 +344,10 @@
             });
             currentTab = n;
         }
-
-        // User status
         function updateUserStatus() {
             document.getElementById('userStatus').textContent = Math.random() > 0.5 ? 'ONLINE' : 'BUSY';
         }
         setInterval(updateUserStatus, 3000);
-
-        // Fake activity feed
         function populateActivityFeed() {
             const feed = document.getElementById('activityFeed');
             const activities = [
@@ -345,10 +356,8 @@
                 "Iron won 2nd place in Obby Royale",
                 "Iron upgraded to VIP rank"
             ];
-            feed.innerHTML = activities.map(a => `<p class="flex gap-2"><span class="text-[#00ff9d]">•</span> ${a}</p>`).join('');
+            feed.innerHTML = activities.map(a => `<p class="flex gap-2"><span class="text-[#e8e8e8]">•</span> ${a}</p>`).join('');
         }
-
-        // Fake profiles
         function populateProfiles() {
             const profiles = [
                 {id: 123456, name: "IronWolf", presence: "Playing", bio: "Roblox developer • Level 420"},
@@ -381,38 +390,32 @@
                 <div class="mt-6 text-sm opacity-70">Roblox developer • Level 420</div>
             `;
         }
-
-        // Fake friends
         function populateFriends() {
             const friends = document.getElementById('friendsList');
             const list = [];
             for (let i = 0; i < 8; i++) {
                 list.push(`
                     <div class="terminal p-4 text-center">
-                        <div class="w-20 h-20 mx-auto bg-[#00ff9d]/10 rounded-full mb-3"></div>
+                        <div class="w-20 h-20 mx-auto bg-[#e8e8e8]/10 rounded-full mb-3"></div>
                         <p class="text-sm">Friend_${i}</p>
                     </div>
                 `);
             }
             friends.innerHTML = list.join('');
         }
-
-        // Fake games
         function populateGames() {
             const games = document.getElementById('gamesList');
             const list = [];
             for (let i = 0; i < 12; i++) {
                 list.push(`
-                    <div class="terminal p-4 text-center cursor-pointer hover:border-[#00ff9d]">
-                        <div class="text-4xl mb-3">🎮</div>
+                    <div class="terminal p-4 text-center cursor-pointer hover:border-[#e8e8e8]">
+                        <div class="text-4xl mb-3"></div>
                         <p class="text-sm">Game ${i}</p>
                     </div>
                 `);
             }
             games.innerHTML = list.join('');
         }
-
-        // Fake chat
         function populateChatChannels() {
             const channels = document.getElementById('chatChannels');
             channels.innerHTML = `
@@ -441,7 +444,7 @@
             ];
             msgs.innerHTML = messages.map(m => `
                 <div class="flex gap-2">
-                    <span class="text-[#00ff9d]">${m.user}:</span>
+                    <span class="text-[#e8e8e8]">${m.user}:</span>
                     <span>${m.text}</span>
                 </div>
             `).join('');
@@ -452,12 +455,10 @@
             const input = document.getElementById('chatInput');
             if (!input.value.trim()) return;
             const msgs = document.getElementById('chatMessages');
-            msgs.innerHTML += `<div class="flex gap-2"><span class="text-[#00ff9d]">You:</span> ${input.value}</div>`;
+            msgs.innerHTML += `<div class="flex gap-2"><span class="text-[#e8e8e8]">You:</span> ${input.value}</div>`;
             msgs.scrollTop = msgs.scrollHeight;
             input.value = '';
         }
-
-        // Fake mod log
         function populateModLog() {
             const log = document.getElementById('modLog');
             const entries = [
@@ -467,8 +468,6 @@
             ];
             log.innerHTML = entries.map(e => `<div class="terminal p-3 text-sm">${e}</div>`).join('');
         }
-
-        // Fake charts
         function initChart() {
             const ctx = document.getElementById('statsChart').getContext('2d');
             new Chart(ctx, {
@@ -478,22 +477,20 @@
                     datasets: [{
                         label: 'Activity',
                         data: [1200, 1800, 900, 2200, 1400, 1900],
-                        borderColor: '#00ff9d',
+                        borderColor: '#e8e8e8',
                         tension: 0.4
                     }]
                 },
                 options: { plugins: { legend: { display: false } } }
             });
         }
-
-        // Fake market
         function populateMarket() {
             const items = document.getElementById('marketItems');
             const list = [];
             for (let i = 0; i < 8; i++) {
                 list.push(`
                     <div class="terminal p-4 text-center">
-                        <div class="text-5xl mb-3">💎</div>
+                        <div class="text-5xl mb-3"></div>
                         <p class="text-sm">Item ${i}</p>
                         <p class="text-xs opacity-60 mt-1">999 Robux</p>
                     </div>
@@ -501,8 +498,6 @@
             }
             items.innerHTML = list.join('');
         }
-
-        // ====================== PASTEBIN FUNCTIONS ======================
         let currentPasteId = null;
         let pastes = [];
 
@@ -584,7 +579,7 @@
             pastes = saved ? JSON.parse(saved) : [];
             const container = document.getElementById('pasteList');
             container.innerHTML = pastes.map(p => `
-                <div onclick="openPaste('${p.id}')" class="terminal p-4 cursor-pointer hover:border-[#00ff9d]">
+                <div onclick="openPaste('${p.id}')" class="terminal p-4 cursor-pointer hover:border-[#e8e8e8]">
                     <div class="flex justify-between">
                         <span class="font-bold">${p.title}</span>
                         <span class="text-xs opacity-60">${new Date(p.created).toLocaleString()}</span>
@@ -601,8 +596,6 @@
             document.getElementById('pasteTitle').value = paste.title;
             document.getElementById('pasteContent').value = paste.content;
         }
-
-        // ====================== INIT ======================
         window.onload = () => {
             switchTab(0);
             populateActivityFeed();
@@ -616,11 +609,9 @@
             loadPasteList();
             initParticles();
             animateParticles();
-            
-            // Auto-refresh activity
             setInterval(() => {
                 const feed = document.getElementById('activityFeed');
-                feed.innerHTML = feed.innerHTML + `<p class="flex gap-2"><span class="text-[#00ff9d]">•</span> Random event</p>`;
+                feed.innerHTML = feed.innerHTML + `<p class="flex gap-2"><span class="text-[#e8e8e8]">•</span> Random event</p>`;
             }, 8000);
         };
     </script>
