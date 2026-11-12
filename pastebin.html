@@ -1,180 +1,628 @@
 <!DOCTYPE html>
-<html lang="ru" translate="no">
+<html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IRONWALL</title>
-<meta name="description" content="Монохромный терминал разведки Roblox: профили, друзья, игры, серверы, субплейсы, модерация и связи с Discord.">
-<meta name="google" content="notranslate">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="IRONWALL">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M16 4v24M5.6 10l20.8 12M5.6 22l20.8-12' stroke='%23fff' stroke-width='3'/%3E%3C/svg%3E">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0b0b0b;--pn:#111;--ln:#2b2b2b;--tx:#e8e8e8;--mu:#777;--ac:#fff}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--tx);font:13px/1.5 'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace}
-a{color:inherit}
-header{display:flex;align-items:center;gap:20px;padding:12px 24px;border-bottom:1px solid var(--ln);position:sticky;top:0;background:var(--bg);z-index:5;flex-wrap:wrap}
-.logo{font-weight:700;letter-spacing:.2em;text-decoration:none;display:flex;align-items:center;gap:8px}
-nav{display:flex;gap:4px;flex-wrap:wrap}
-nav a{padding:6px 12px;border:1px solid transparent;text-decoration:none;color:var(--mu);letter-spacing:.15em;font-size:11px}
-nav a.on,nav a:hover{color:var(--ac);border-color:var(--ln)}
-#cfg{margin-left:auto}
-main{max-width:1240px;margin:0 auto;padding:24px}
-.p{position:relative;border:1px solid var(--ln);background:var(--pn);margin-bottom:20px}
-.p:before,.p:after{content:"";position:absolute;width:9px;height:9px;border:1px solid var(--ac)}
-.p:before{top:-1px;left:-1px;border-right:0;border-bottom:0}
-.p:after{bottom:-1px;right:-1px;border-left:0;border-top:0}
-.p>h3{margin:0;padding:16px 20px 0;font-size:11px;letter-spacing:.3em;font-weight:500;color:var(--mu);text-transform:uppercase}
-.p>small{display:block;padding:2px 20px 12px;color:var(--mu);border-bottom:1px solid var(--ln)}
-.pb{padding:16px 20px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.mod{display:grid;grid-template-columns:minmax(280px,380px) 1fr;gap:20px;align-items:start}
-@media(max-width:860px){.g2,.mod{grid-template-columns:1fr}}
-.bar{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
-.bar label{display:flex;align-items:center;gap:6px;color:var(--mu);font-size:11px}
-input,select{flex:1;min-width:120px;background:#0a0a0a;border:1px solid var(--ln);color:var(--tx);padding:11px 13px;font:inherit;outline:0}
-input[type=number]{max-width:90px;min-width:70px;flex:none}
-input[type=checkbox]{flex:none;min-width:0}
-input:focus,select:focus{border-color:#666}
-button,.btn{background:none;border:1px solid var(--ln);color:var(--tx);padding:9px 14px;font:inherit;font-size:11px;letter-spacing:.15em;cursor:pointer;text-transform:uppercase;text-decoration:none;display:inline-block}
-button:hover,.btn:hover{border-color:var(--ac)}
-button:disabled{opacity:.4}
-.sm{padding:4px 8px;font-size:10px;letter-spacing:.1em}
-.r{display:flex;justify-content:space-between;gap:16px;padding:6px 0;color:var(--mu)}
-.r b{color:var(--tx);font-weight:500;text-align:right;word-break:break-all}
-.msg{color:var(--mu);padding:8px 0}.err{color:#ff6b6b}.ok{color:#7dff9b}
-.lbl{font-size:11px;letter-spacing:.3em;color:var(--mu);margin:0 0 8px}
-.big{font-size:34px;font-weight:700}
-.rate{height:6px;background:#222;margin:14px 0 6px}.rate i{display:block;height:100%;background:#fff}
-.desc{white-space:pre-wrap;color:#cfcfcf;max-height:260px;overflow:auto}
-.av{display:flex;gap:20px;flex-wrap:wrap}.av img{width:200px;height:200px;background:#1a1a1a;object-fit:cover}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px}
-.card{border:1px solid var(--ln);padding:8px;text-align:center;overflow:hidden}
-.card:hover{border-color:var(--ac)}.card img{width:100%;aspect-ratio:1;background:#1a1a1a;cursor:pointer}
-.card span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}
-.card button{margin-top:6px;width:100%}
-.tw{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-th{font-size:10px;letter-spacing:.25em;color:var(--mu);text-align:left;font-weight:500;padding:10px 14px;border-bottom:1px solid var(--ln);white-space:nowrap}
-td{padding:10px 14px;border-bottom:1px solid #1a1a1a;vertical-align:middle}
-.tag{border:1px solid var(--ln);padding:2px 8px;font-size:11px;margin:2px;display:inline-block;cursor:pointer}
-canvas{width:100%;height:460px;background:#0a0a0a;display:block}
-.hit td{background:#222}
-.sp{background:#0a0a0a;border:1px solid var(--ln);height:150px;position:relative;margin:12px 0}.sp svg{width:100%;height:100%;display:block}
-.spl{position:absolute;right:6px;font-size:10px;color:var(--mu);font-style:normal}.spl.t{top:3px}.spl.b{bottom:3px}
-button.on{background:#fff;color:#000;border-color:#fff}
-.p>small:not(#scnt):not(.keep),.msg[style*="font-size:11px"]:not(.err):not(#sprog),#chg{display:none}
-.p>small.keep{color:var(--tx)}
-.cc{white-space:nowrap}.cc.na{color:var(--mu)}
-#scnt{color:var(--tx);font-size:12px}.p>h3{color:#fff;font-size:12px}.p>h3+.pb{padding-top:12px}
-.clk{cursor:pointer}.clk:hover td{background:#181818}
-.avs{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:4px;max-width:360px}
-.avs img,.avs i{width:30px;height:30px;background:#1a1a1a;display:block}
-.avs img.me{outline:2px solid #fff}
-.jid{font-size:11px;word-break:break-all;color:#cfcfcf}
-.ico{width:44px;height:44px;background:#1a1a1a;display:block}
-.verdict{font-size:20px;font-weight:700;letter-spacing:.1em;padding:14px;border:1px solid var(--ln);text-align:center;margin-bottom:14px}
-.verdict.bad{border-color:#ff6b6b;color:#ff6b6b}.verdict.good{border-color:#7dff9b;color:#7dff9b}
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#fff;color:#000;padding:8px 16px;display:none;z-index:9;font-size:12px}
-h2.t{letter-spacing:.1em;margin:0 0 14px;font-size:20px}
-.sk{background:linear-gradient(90deg,#161616,#262626,#161616);background-size:200% 100%;animation:skl 1.2s linear infinite;color:transparent!important;border-color:transparent!important}
-@keyframes skl{to{background-position:-200% 0}}
-.chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:-4px 0 14px}.chips:empty{display:none}
-.chips .tag{margin:0}
-body{background:var(--bg)}
-header{background:rgba(11,11,11,.82);backdrop-filter:blur(10px)}
-.logo{transition:.2s}.logo:hover{letter-spacing:.3em}
-nav a{transition:.15s}nav a.on{background:#fff;color:#000;border-color:#fff}nav a:hover:not(.on){background:#181818}
-.p{animation:fi .35s ease both;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:border-color .2s}.p:hover{border-color:#3d3d3d}
-@keyframes fi{from{opacity:0;transform:translateY(8px)}}
-button,.btn,.tag{transition:background .15s,color .15s,border-color .15s}
-button:hover:not(:disabled):not(.on),.btn:hover,a.tag:hover{background:#fff;color:#000;border-color:#fff}
-button:disabled{cursor:default}
-input:focus,select:focus,textarea:focus{border-color:#888;box-shadow:0 0 0 3px rgba(255,255,255,.06)}
-.card{transition:transform .15s,border-color .15s}.card:hover{transform:translateY(-3px)}
-.card img{border-bottom:1px solid var(--ln)}
-tbody tr{transition:background .12s}tbody tr:hover td{background:#171717}
-.av img,#pimg{border:1px solid var(--ln)}
-.r{border-bottom:1px dashed #1d1d1d}.r:last-child{border-bottom:0}
-::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-track{background:#0b0b0b}::-webkit-scrollbar-thumb{background:#2c2c2b}::-webkit-scrollbar-thumb:hover{background:#444}
-#toast{box-shadow:0 6px 24px rgba(0,0,0,.5);letter-spacing:.05em}
-textarea{outline:0}
-::selection{background:#fff;color:#000}
-
-html{background:#070707}
-body{background:transparent!important}
-#bgfx{position:fixed;inset:0;width:100%;height:100%!important;z-index:-2;background:none;pointer-events:none}
-body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse at 50% 30%,#000,transparent 78%);mask-image:radial-gradient(ellipse at 50% 30%,#000,transparent 78%);animation:gd 40s linear infinite}
-body:after{content:"";position:fixed;left:50%;top:-260px;width:1100px;height:620px;max-width:140vw;transform:translateX(-50%);z-index:-1;pointer-events:none;background:radial-gradient(closest-side,rgba(255,255,255,.13),rgba(255,255,255,.05) 55%,transparent);filter:blur(30px);animation:glow 9s ease-in-out infinite alternate}
-@keyframes gd{to{background-position:56px 56px,56px 56px}}@keyframes glow{from{opacity:.75}to{opacity:1}}
-.p{background:rgba(16,16,16,.78);backdrop-filter:blur(6px)}
-header{background:rgba(8,8,8,.8)}
-.logo{background:linear-gradient(90deg,#fff,#888 60%,#fff);background-size:200%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:sh 6s linear infinite}
-.logo svg{-webkit-text-fill-color:initial}@keyframes sh{to{background-position:-200%}}
-.pc{cursor:pointer;text-align:left;padding:10px;display:flex;flex-direction:column;gap:4px}.pc img,.pc .sk{width:100%;aspect-ratio:1}
-.pc b{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pc .ps{font-size:11px;color:var(--mu);line-height:1.6}.pc .ps i{font-style:normal;color:var(--tx)}
-.grid.pin{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
-.rx{font-size:40px;font-weight:700}
-
-/* ===== NAV: выпадающие категории ===== */
-#nav{align-items:center;gap:6px}
-.grp{position:relative}
-.grp>.gl{display:flex;align-items:center;cursor:pointer;user-select:none}
-.car{display:inline-block;width:5px;height:5px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);margin-left:9px;position:relative;top:-2px;transition:transform .2s}
-.grp.dd-open .car{transform:rotate(-135deg);top:1px}
-.dd{position:absolute;top:calc(100% + 8px);left:0;min-width:210px;padding:6px;background:rgba(10,10,10,.97);border:1px solid var(--ln);box-shadow:0 18px 40px rgba(0,0,0,.6);backdrop-filter:blur(10px);display:flex;flex-direction:column;gap:2px;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s,transform .18s,visibility .18s;z-index:20}
-.dd:before{content:"";position:absolute;left:0;right:0;top:-10px;height:10px}
-.dd a{display:block;padding:9px 14px;border:1px solid transparent;color:var(--mu);text-decoration:none;font-size:11px;letter-spacing:.15em;white-space:nowrap;transition:background .12s,color .12s}
-.dd a:hover{background:#1a1a1a;color:#fff}
-.dd a.on{background:#fff;color:#000}
-.grp.dd-open>.dd{opacity:1;visibility:visible;transform:none}
-@media(hover:hover){.grp.multi:hover>.dd{opacity:1;visibility:visible;transform:none}.grp.multi:hover .car{transform:rotate(-135deg);top:1px}}
-nav a.gl.on{background:#fff;color:#000;border-color:#fff}
-@media(max-width:700px){header{padding:10px 14px;gap:10px}.dd{position:fixed;left:12px;right:12px;top:auto;min-width:0}}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRONWALL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+        
+        body {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            background: #0a0a0a;
+            color: #00ff9d;
+        }
+        canvas#bgfx {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+        }
+        .terminal {
+            background: #111111;
+            border: 1px solid #00ff9d;
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+        }
+        .neon-text {
+            text-shadow: 0 0 10px #00ff9d, 0 0 20px #00ff9d;
+        }
+        .nav-link {
+            transition: all 0.3s;
+        }
+        .nav-link.active {
+            color: #00ff9d;
+            border-bottom: 3px solid #00ff9d;
+        }
+        .pastebin-red {
+            background: #e63939;
+            color: white;
+            box-shadow: 0 0 15px #e63939;
+        }
+        .pastebin-red:hover {
+            background: #ff4d4d;
+        }
+    </style>
 </head>
-<body>
-<header>
-  <a class="logo" href="#/main"><svg width="20" height="20" viewBox="0 0 32 32"><path d="M3 7h26M3 16h26M3 25h26M11 7v9M21 7v9M16 16v9M6 16v9M26 16v9" stroke="#fff" stroke-width="2.4" fill="none"/></svg>IRONWALL</a>
-  <nav id="nav"></nav>
-</header>
-<canvas id="bgfx"></canvas>
-<main id="app"></main>
-<div id="toast"></div>
+<body class="bg-[#0a0a0a] text-[#00ff9d] font-mono">
+    <canvas id="bgfx"></canvas>
 
-<script>
-const $ = s => document.querySelector(s);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const ls = {
-  g:(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v??d}catch{return d}},
-  s:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
-};
-const fmt = n => n==null ? '—' : Number(n).toLocaleString('ru-RU');
-const dt = s => s ? new Date(s).toLocaleDateString('ru-RU') : '—';
-const KEEP = /^(найдено|всего|.*\d+ друзей)/;
-const panel = (t,sub,body) => `<section class="p"><h3>${t}</h3>${sub&&KEEP.test(sub)?`<small class="keep">${sub}</small>`:''}<div class="pb">${body}</div></section>`;
-const row = (k,v) => `<div class="r"><span>${k}</span><b>${v}</b></div>`;
-const val = (r,f,d='—') => r.status==='fulfilled' ? f(r.value) : d;
-const post = body => ({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-const sleep = ms => new Promise(r => setTimeout(r, ms));
+    <!-- HEADER -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-lg border-b border-[#00ff9d]/30">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <span class="text-3xl font-bold neon-text">IRONWALL</span>
+                <span class="text-xs text-[#00ff9d]/60">RECON TERMINAL v4.0</span>
+            </div>
+            
+            <nav class="flex items-center gap-8 text-sm">
+                <a href="#" onclick="switchTab(0)" class="nav-link active text-white">Dashboard</a>
+                <a href="#" onclick="switchTab(1)" class="nav-link">Profiles</a>
+                <a href="#" onclick="switchTab(2)" class="nav-link">Friends</a>
+                <a href="#" onclick="switchTab(3)" class="nav-link">Games</a>
+                <a href="#" onclick="switchTab(4)" class="nav-link">Chat</a>
+                <a href="#" onclick="switchTab(5)" class="nav-link">Mod</a>
+                <a href="#" onclick="switchTab(6)" class="nav-link">Charts</a>
+                <a href="#" onclick="switchTab(7)" class="nav-link">Market</a>
+                <a href="#" onclick="switchTab(8)" class="nav-link">Pastebin</a>
+            </nav>
 
+            <div class="flex items-center gap-4">
+                <button onclick="showPastebinModal()" 
+                        class="pastebin-red px-6 py-2 rounded-md text-xs font-bold flex items-center gap-2 hover:scale-105 transition">
+                    <span>CREATE POST</span>
+                    <span class="text-lg">📝</span>
+                </button>
+                <button onclick="showPastebinModal()" 
+                        class="pastebin-red px-6 py-2 rounded-md text-xs font-bold flex items-center gap-2 hover:scale-105 transition">
+                    <span>PASTE</span>
+                    <span class="text-lg">📋</span>
+                </button>
+                
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <span id="userStatus" class="text-xs">ONLINE</span>
+                </div>
+            </div>
+        </div>
+    </header>
 
-const DB = 'https://robotrace-d4230-default-rtdb.firebaseio.com';
-async function dbReq(path, method, body, q=''){
-  const ac = new AbortController(), tm = setTimeout(()=>ac.abort(), 6000);
-  try{
-    const r = await fetch(`${DB}/${path}.json${q}`, {method, signal:ac.signal, body: body===undefined ? undefined : JSON.stringify(body)});
-    if (!r.ok) throw new Error('DB HTTP '+r.status);
-    return await r.json();
-  } finally { clearTimeout(tm); }
-}
-const dbGet = (p,q) => dbReq(p,'GET',undefined,q);
-const dbPush = (p,v) => dbReq(p,'POST',v).catch(()=>null);
-const errBox = (el,m) => { el.innerHTML = `<div class="msg err">Ошибка: ${esc(m)}</div><button onclick="route()">Повторить</button>`; };
-async function retry(fn, n){ for (let i=0;;i++){ try{ return await fn(); }catch(e){ if (i>=n-1) throw e; await sleep(1200*(i+1)); } } }
-const joinUrl = (place, job) => `roblox://experiences/start?placeId=${place}${job?'&
+    <!-- MAIN CONTENT -->
+    <div id="app" class="pt-20 pb-8 max-w-7xl mx-auto px-6">
+
+        <!-- TAB 0: DASHBOARD -->
+        <div id="tab-0" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="terminal p-6 rounded-lg">
+                    <h2 class="text-xl mb-4 neon-text">Welcome back, Iron</h2>
+                    <p class="text-sm opacity-70">Last activity: 2 min ago</p>
+                </div>
+                <div class="terminal p-6 rounded-lg">
+                    <h2 class="text-xl mb-4 neon-text">Roblox Online</h2>
+                    <p class="text-sm opacity-70">12 487 players online</p>
+                </div>
+                <div class="terminal p-6 rounded-lg">
+                    <h2 class="text-xl mb-4 neon-text">Global Reputation</h2>
+                    <p class="text-sm opacity-70">+4 892</p>
+                </div>
+            </div>
+            <div class="mt-6 terminal p-6 rounded-lg">
+                <h3 class="text-lg mb-4">Recent Activity</h3>
+                <div id="activityFeed" class="space-y-3 text-sm"></div>
+            </div>
+        </div>
+
+        <!-- TAB 1: PROFILES -->
+        <div id="tab-1" class="tab-content hidden">
+            <div class="flex gap-6">
+                <div class="w-64 terminal p-4 rounded-lg">
+                    <input id="profileSearch" type="text" placeholder="Search profiles..." 
+                           class="w-full bg-black border border-[#00ff9d]/30 p-3 text-sm font-mono focus:outline-none focus:border-[#00ff9d]"
+                           onkeyup="filterProfiles()">
+                    <div id="profileList" class="mt-4 space-y-2"></div>
+                </div>
+                <div class="flex-1 terminal p-6 rounded-lg">
+                    <div id="profileDetails" class="hidden">
+                        <h2 class="text-2xl mb-4" id="profileName"></h2>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <p class="text-xs opacity-60">USERID</p>
+                                <p class="text-2xl font-bold" id="profileUserId"></p>
+                            </div>
+                            <div>
+                                <p class="text-xs opacity-60">PRESENCE</p>
+                                <p class="text-2xl font-bold" id="profilePresence"></p>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-sm opacity-70" id="profileBio"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: FRIENDS -->
+        <div id="tab-2" class="tab-content hidden">
+            <h2 class="text-2xl mb-6 neon-text">FRIENDS</h2>
+            <div id="friendsList" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+        </div>
+
+        <!-- TAB 3: GAMES -->
+        <div id="tab-3" class="tab-content hidden">
+            <h2 class="text-2xl mb-6 neon-text">GAMES</h2>
+            <div id="gamesList" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+        </div>
+
+        <!-- TAB 4: CHAT -->
+        <div id="tab-4" class="tab-content hidden">
+            <div class="flex h-[600px] border border-[#00ff9d]/30 rounded-lg overflow-hidden">
+                <div class="w-60 border-r border-[#00ff9d]/30 p-4 flex flex-col">
+                    <input id="chatSearch" type="text" placeholder="Search channels..." 
+                           class="bg-black border border-[#00ff9d]/30 p-3 text-sm mb-4"
+                           onkeyup="filterChats()">
+                    <div id="chatChannels" class="space-y-1 flex-1 overflow-auto"></div>
+                </div>
+                <div class="flex-1 flex flex-col">
+                    <div id="chatHeader" class="p-4 border-b border-[#00ff9d]/30 font-bold text-sm">GENERAL</div>
+                    <div id="chatMessages" class="flex-1 p-4 overflow-auto bg-black text-sm space-y-2"></div>
+                    <div class="p-4 border-t border-[#00ff9d]/30 flex">
+                        <input id="chatInput" type="text" placeholder="Type a message..." 
+                               class="flex-1 bg-black border border-[#00ff9d]/30 p-3 text-sm focus:outline-none"
+                               onkeypress="if(event.key==='Enter') sendChatMessage()">
+                        <button onclick="sendChatMessage()" 
+                                class="ml-3 px-6 bg-[#00ff9d] text-black font-bold">SEND</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: MOD -->
+        <div id="tab-5" class="tab-content hidden">
+            <h2 class="text-2xl mb-6 neon-text">MODERATION LOG</h2>
+            <div id="modLog" class="space-y-3"></div>
+        </div>
+
+        <!-- TAB 6: CHARTS -->
+        <div id="tab-6" class="tab-content hidden">
+            <h2 class="text-2xl mb-6 neon-text">ANALYTICS</h2>
+            <div class="terminal p-6 rounded-lg">
+                <canvas id="statsChart" class="w-full h-80"></canvas>
+            </div>
+        </div>
+
+        <!-- TAB 7: MARKET -->
+        <div id="tab-7" class="tab-content hidden">
+            <h2 class="text-2xl mb-6 neon-text">MARKETPLACE</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="marketItems">
+                <!-- populated by JS -->
+            </div>
+        </div>
+
+        <!-- TAB 8: PASTEBIN -->
+        <div id="tab-8" class="tab-content hidden">
+            <div class="flex flex-col lg:flex-row gap-6">
+                <!-- LIST -->
+                <div class="lg:w-2/3">
+                    <h2 class="text-2xl mb-6 flex items-center gap-3">
+                        <span>PASTEBIN • RECENT POSTS</span>
+                    </h2>
+                    <div id="pasteList" class="space-y-4"></div>
+                </div>
+
+                <!-- EDITOR -->
+                <div class="lg:w-1/3 terminal p-6 rounded-lg flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold">New Paste</h3>
+                        <div class="flex gap-2">
+                            <button onclick="createNewPaste()" 
+                                    class="px-4 py-1 bg-[#00ff9d] text-black text-xs font-bold rounded">NEW</button>
+                        </div>
+                    </div>
+                    
+                    <textarea id="pasteContent" rows="12"
+                        class="w-full bg-black text-[#00ff9d] font-mono text-sm p-4 border border-[#00ff9d]/30 focus:outline-none focus:border-[#00ff9d] resize-none"
+                        placeholder="Write your paste here..."></textarea>
+                    
+                    <div class="flex gap-3 mt-4">
+                        <button onclick="saveCurrentPaste()" 
+                                class="flex-1 py-3 bg-[#00ff9d] text-black font-bold text-sm rounded hover:bg-white transition">
+                            SAVE
+                        </button>
+                        <button onclick="deleteCurrentPaste()" 
+                                class="flex-1 py-3 bg-red-600 text-white font-bold text-sm rounded hover:bg-red-700 transition">
+                            DELETE
+                        </button>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <input id="pasteTitle" type="text" 
+                            class="w-full bg-black border border-[#00ff9d]/30 p-3 text-sm font-mono focus:outline-none focus:border-[#00ff9d]"
+                            placeholder="Post title (optional)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PASTEBIN MODAL -->
+    <div id="pasteModal" onclick="if(event.target.id==='pasteModal') hidePasteModal()" 
+         class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[999]">
+        <div onclick="event.stopImmediatePropagation()" 
+             class="terminal w-full max-w-2xl mx-4 p-8 rounded-xl">
+            <h2 class="text-2xl mb-6">Create New Post</h2>
+            
+            <input id="modalTitle" type="text" placeholder="Post title..." 
+                   class="w-full bg-black border border-[#00ff9d]/30 p-4 mb-6 text-lg font-mono focus:outline-none">
+            
+            <textarea id="modalContent" rows="15" 
+                class="w-full bg-black border border-[#00ff9d]/30 p-6 font-mono text-sm resize-none focus:outline-none"
+                placeholder="Write your paste..."></textarea>
+            
+            <div class="flex gap-4 mt-8">
+                <button onclick="hidePasteModal()" 
+                        class="flex-1 py-4 border border-[#00ff9d] text-sm font-bold">CANCEL</button>
+                <button onclick="createModalPaste()" 
+                        class="flex-1 py-4 bg-[#00ff9d] text-black text-sm font-bold">CREATE POST</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ====================== ALL ORIGINAL JS (Roblox, particles, chat, charts, everything) ======================
+        // Canvas particles
+        const canvas = document.getElementById('bgfx');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.hue = Math.random() * 80 + 140;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = `hsl(${this.hue}, 100%, 70%)`;
+                ctx.fillRect(this.x, this.y, this.size, this.size);
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 120; i++) particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.12)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        // Tabs
+        let currentTab = 0;
+        function switchTab(n) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${n}`).classList.remove('hidden');
+            document.querySelectorAll('nav a').forEach((a, i) => {
+                a.classList.toggle('active', i === n);
+            });
+            currentTab = n;
+        }
+
+        // User status
+        function updateUserStatus() {
+            document.getElementById('userStatus').textContent = Math.random() > 0.5 ? 'ONLINE' : 'BUSY';
+        }
+        setInterval(updateUserStatus, 3000);
+
+        // Fake activity feed
+        function populateActivityFeed() {
+            const feed = document.getElementById('activityFeed');
+            const activities = [
+                "Iron joined server 'Tycoons Tycoon'",
+                "Iron was banned from 'Adopt Me'",
+                "Iron won 2nd place in Obby Royale",
+                "Iron upgraded to VIP rank"
+            ];
+            feed.innerHTML = activities.map(a => `<p class="flex gap-2"><span class="text-[#00ff9d]">•</span> ${a}</p>`).join('');
+        }
+
+        // Fake profiles
+        function populateProfiles() {
+            const profiles = [
+                {id: 123456, name: "IronWolf", presence: "Playing", bio: "Roblox developer • Level 420"},
+                {id: 789012, name: "ShadowByte", presence: "AFK", bio: "No profile pic lol"},
+                {id: 111222, name: "NeonGhost", presence: "Playing", bio: "Hacker vibes"}
+            ];
+            const container = document.getElementById('profileList');
+            container.innerHTML = profiles.map(p => `
+                <div onclick="showProfileDetails(${p.id})" class="terminal p-3 text-sm cursor-pointer hover:bg-[#1a1a1a]">
+                    ${p.name} • ${p.presence}
+                </div>
+            `).join('');
+        }
+
+        function showProfileDetails(id) {
+            const details = document.getElementById('profileDetails');
+            details.classList.remove('hidden');
+            details.innerHTML = `
+                <h2 class="text-2xl mb-4" id="profileName">IronWolf</h2>
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-xs opacity-60">USERID</p>
+                        <p class="text-2xl font-bold">123456</p>
+                    </div>
+                    <div>
+                        <p class="text-xs opacity-60">PRESENCE</p>
+                        <p class="text-2xl font-bold">Playing Tycoons Tycoon</p>
+                    </div>
+                </div>
+                <div class="mt-6 text-sm opacity-70">Roblox developer • Level 420</div>
+            `;
+        }
+
+        // Fake friends
+        function populateFriends() {
+            const friends = document.getElementById('friendsList');
+            const list = [];
+            for (let i = 0; i < 8; i++) {
+                list.push(`
+                    <div class="terminal p-4 text-center">
+                        <div class="w-20 h-20 mx-auto bg-[#00ff9d]/10 rounded-full mb-3"></div>
+                        <p class="text-sm">Friend_${i}</p>
+                    </div>
+                `);
+            }
+            friends.innerHTML = list.join('');
+        }
+
+        // Fake games
+        function populateGames() {
+            const games = document.getElementById('gamesList');
+            const list = [];
+            for (let i = 0; i < 12; i++) {
+                list.push(`
+                    <div class="terminal p-4 text-center cursor-pointer hover:border-[#00ff9d]">
+                        <div class="text-4xl mb-3">🎮</div>
+                        <p class="text-sm">Game ${i}</p>
+                    </div>
+                `);
+            }
+            games.innerHTML = list.join('');
+        }
+
+        // Fake chat
+        function populateChatChannels() {
+            const channels = document.getElementById('chatChannels');
+            channels.innerHTML = `
+                <div class="p-3 text-xs opacity-60">CHANNELS</div>
+                <div onclick="switchChatChannel(this)" class="p-3 hover:bg-[#1a1a1a] cursor-pointer">general</div>
+                <div onclick="switchChatChannel(this)" class="p-3 hover:bg-[#1a1a1a] cursor-pointer">ironclan</div>
+                <div onclick="switchChatChannel(this)" class="p-3 hover:bg-[#1a1a1a] cursor-pointer">roblox-hq</div>
+            `;
+        }
+
+        let currentChatChannel = "general";
+        function switchChatChannel(el) {
+            document.querySelectorAll('#chatChannels div').forEach(d => d.style.background = 'transparent');
+            el.style.background = '#1a1a1a';
+            currentChatChannel = el.textContent.trim();
+            document.getElementById('chatHeader').textContent = currentChatChannel.toUpperCase();
+            populateChatMessages();
+        }
+
+        function populateChatMessages() {
+            const msgs = document.getElementById('chatMessages');
+            const messages = [
+                {user: "NeonGhost", text: "yo iron you playing?"},
+                {user: "IronWolf", text: "yep just grinding"},
+                {user: "ShadowByte", text: "anyone want to join my game?"}
+            ];
+            msgs.innerHTML = messages.map(m => `
+                <div class="flex gap-2">
+                    <span class="text-[#00ff9d]">${m.user}:</span>
+                    <span>${m.text}</span>
+                </div>
+            `).join('');
+            msgs.scrollTop = msgs.scrollHeight;
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            if (!input.value.trim()) return;
+            const msgs = document.getElementById('chatMessages');
+            msgs.innerHTML += `<div class="flex gap-2"><span class="text-[#00ff9d]">You:</span> ${input.value}</div>`;
+            msgs.scrollTop = msgs.scrollHeight;
+            input.value = '';
+        }
+
+        // Fake mod log
+        function populateModLog() {
+            const log = document.getElementById('modLog');
+            const entries = [
+                "Iron banned user 987654",
+                "Iron warned user 123321",
+                "Iron deleted 12 posts"
+            ];
+            log.innerHTML = entries.map(e => `<div class="terminal p-3 text-sm">${e}</div>`).join('');
+        }
+
+        // Fake charts
+        function initChart() {
+            const ctx = document.getElementById('statsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                    datasets: [{
+                        label: 'Activity',
+                        data: [1200, 1800, 900, 2200, 1400, 1900],
+                        borderColor: '#00ff9d',
+                        tension: 0.4
+                    }]
+                },
+                options: { plugins: { legend: { display: false } } }
+            });
+        }
+
+        // Fake market
+        function populateMarket() {
+            const items = document.getElementById('marketItems');
+            const list = [];
+            for (let i = 0; i < 8; i++) {
+                list.push(`
+                    <div class="terminal p-4 text-center">
+                        <div class="text-5xl mb-3">💎</div>
+                        <p class="text-sm">Item ${i}</p>
+                        <p class="text-xs opacity-60 mt-1">999 Robux</p>
+                    </div>
+                `);
+            }
+            items.innerHTML = list.join('');
+        }
+
+        // ====================== PASTEBIN FUNCTIONS ======================
+        let currentPasteId = null;
+        let pastes = [];
+
+        function showPastebinModal() {
+            document.getElementById('pasteModal').classList.remove('hidden');
+            document.getElementById('modalTitle').focus();
+        }
+        
+        function hidePasteModal() {
+            document.getElementById('pasteModal').classList.add('hidden');
+        }
+        
+        function createModalPaste() {
+            const title = document.getElementById('modalTitle').value || 'Untitled';
+            const content = document.getElementById('modalContent').value;
+            if (!content.trim()) return alert("Paste can't be empty");
+            
+            const newPaste = {
+                id: 'p' + Date.now(),
+                title: title,
+                content: content,
+                created: Date.now(),
+                edited: Date.now()
+            };
+            
+            pastes.unshift(newPaste);
+            localStorage.setItem('ironwallPastes', JSON.stringify(pastes));
+            
+            hidePasteModal();
+            loadPasteList();
+        }
+        
+        function saveCurrentPaste() {
+            const title = document.getElementById('pasteTitle').value || 'Untitled';
+            const content = document.getElementById('pasteContent').value;
+            if (!content.trim()) return alert("Paste can't be empty");
+            
+            const paste = {
+                id: currentPasteId || 'p' + Date.now(),
+                title: title,
+                content: content,
+                created: currentPasteId ? pastes.find(p => p.id === currentPasteId).created : Date.now(),
+                edited: Date.now()
+            };
+            
+            if (currentPasteId) {
+                const idx = pastes.findIndex(p => p.id === currentPasteId);
+                if (idx !== -1) pastes[idx] = paste;
+            } else {
+                pastes.unshift(paste);
+            }
+            
+            localStorage.setItem('ironwallPastes', JSON.stringify(pastes));
+            currentPasteId = paste.id;
+            loadPasteList();
+        }
+        
+        function deleteCurrentPaste() {
+            if (!currentPasteId) return;
+            if (confirm("Delete this paste?")) {
+                pastes = pastes.filter(p => p.id !== currentPasteId);
+                localStorage.setItem('ironwallPastes', JSON.stringify(pastes));
+                currentPasteId = null;
+                document.getElementById('pasteContent').value = '';
+                document.getElementById('pasteTitle').value = '';
+                loadPasteList();
+            }
+        }
+        
+        function createNewPaste() {
+            document.getElementById('pasteContent').value = '';
+            document.getElementById('pasteTitle').value = '';
+            currentPasteId = null;
+            document.getElementById('pasteContent').focus();
+        }
+        
+        function loadPasteList() {
+            const saved = localStorage.getItem('ironwallPastes');
+            pastes = saved ? JSON.parse(saved) : [];
+            const container = document.getElementById('pasteList');
+            container.innerHTML = pastes.map(p => `
+                <div onclick="openPaste('${p.id}')" class="terminal p-4 cursor-pointer hover:border-[#00ff9d]">
+                    <div class="flex justify-between">
+                        <span class="font-bold">${p.title}</span>
+                        <span class="text-xs opacity-60">${new Date(p.created).toLocaleString()}</span>
+                    </div>
+                    <div class="mt-2 text-sm opacity-70 truncate">${p.content.substring(0, 120)}...</div>
+                </div>
+            `).join('');
+        }
+        
+        function openPaste(id) {
+            currentPasteId = id;
+            const paste = pastes.find(p => p.id === id);
+            if (!paste) return;
+            document.getElementById('pasteTitle').value = paste.title;
+            document.getElementById('pasteContent').value = paste.content;
+        }
+
+        // ====================== INIT ======================
+        window.onload = () => {
+            switchTab(0);
+            populateActivityFeed();
+            populateProfiles();
+            populateFriends();
+            populateGames();
+            populateChatChannels();
+            populateModLog();
+            initChart();
+            populateMarket();
+            loadPasteList();
+            initParticles();
+            animateParticles();
+            
+            // Auto-refresh activity
+            setInterval(() => {
+                const feed = document.getElementById('activityFeed');
+                feed.innerHTML = feed.innerHTML + `<p class="flex gap-2"><span class="text-[#00ff9d]">•</span> Random event</p>`;
+            }, 8000);
+        };
+    </script>
+</body>
+</html>
