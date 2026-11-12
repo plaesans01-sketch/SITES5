@@ -23,7 +23,6 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;backg
 </style>
 </head>
 <body>
-<canvas id="bgfx"></canvas>
 <header class="fixed top-0 left-0 right-0 z-50">
 <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
 <span class="text-3xl font-bold tracking-widest">IRONWALL</span>
@@ -93,29 +92,6 @@ body:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;backg
 </main>
 <script>
 
-const canvas = document.getElementById('bgfx');
-const ctx = canvas.getContext('2d');
-let particles = [];
-function resizeCanvas() {
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-}
-
-function initParticles() {
-            particles = [];
-            for (let i = 0; i < 120; i++) particles.push(new Particle());
-        }
-function animateParticles() {
-            ctx.fillStyle = 'rgba(10, 10, 10, 0.12)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animateParticles);
-        }
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
 let currentPasteId = null;
 let pastes = [];
 async function saveCurrentPaste() {
@@ -130,7 +106,7 @@ async function saveCurrentPaste() {
                     body: JSON.stringify({id: currentPasteId, title, content})
                 });
                 const result = await response.json();
-                if (!response.ok) throw new Error(result.error || 'Save failed');
+                if (!response.ok) throw new Error(result.error || ('HTTP ' + response.status + ' save failed'));
                 currentPasteId = result.id;
                 await loadPasteList();
                 openPaste(result.id);
@@ -146,7 +122,7 @@ async function deleteCurrentPaste() {
                 const response = await fetch('/api/pastes/' + encodeURIComponent(currentPasteId), {
                     method:'DELETE', credentials:'same-origin'
                 });
-                if (!response.ok) throw new Error('Delete failed');
+                if (!response.ok) { const detail = await response.text(); throw new Error('HTTP ' + response.status + ': ' + detail); }
                 currentPasteId = null;
                 document.getElementById('pasteContent').value = '';
                 document.getElementById('pasteTitle').value = '';
@@ -186,7 +162,7 @@ async function loadPasteList() {
             container.innerHTML = '<div class="opacity-60 text-sm">LOADING...</div>';
             try {
                 const response = await fetch('/api/pastes', {credentials:'same-origin'});
-                if (!response.ok) throw new Error('Unable to load pastes');
+                if (!response.ok) { const detail = await response.text(); throw new Error('HTTP ' + response.status + ': ' + detail); }
                 pastes = await response.json();
                 container.innerHTML = pastes.map(p => `
                     <div class="terminal p-4 hover:border-white">
@@ -201,7 +177,7 @@ async function loadPasteList() {
                         </div>
                     </div>`).join('') || '<div class="opacity-60 text-sm">NO PASTES</div>';
             } catch (error) {
-                container.innerHTML = '<div class="text-sm">PASTE API UNAVAILABLE</div>';
+                container.innerHTML = '<div class="text-sm">PASTE API ERROR: ' + escapeHTML(error.message) + '</div>';
             }
         }
 async function fetchPaste(id) {
@@ -238,7 +214,7 @@ async function openPaste(id) {
         }
 async function renderRoute() {
             const route = decodeURIComponent(location.hash.slice(1));
-            const view = route.match(/^\\/(.+)$/);
+            const view = route.match(/^\/(.+)$/);
             document.getElementById('pasteViewer').classList.add('hidden');
             document.getElementById('rawViewer').classList.add('hidden');
             if (view) {
@@ -254,8 +230,7 @@ window.addEventListener('hashchange', renderRoute);
 window.addEventListener('DOMContentLoaded', () => {
 loadPasteList();
 renderRoute();
-initParticles();
-animateParticles();
+
 });
 
 </script>
