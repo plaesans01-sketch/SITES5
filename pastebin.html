@@ -3,381 +3,189 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IRONWALL // PASTE</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IRONWALL</title>
 <style>
-:root {
-  color-scheme: dark;
-  --bg: #050505;
-  --panel: #0b0b0b;
-  --line: #292929;
-  --text: #f2f2f2;
-  --muted: #777;
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: "Courier New", monospace;
-  min-height: 100vh;
-}
-header {
-  height: 66px;
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 5%;
-}
-.logo {
-  font-size: 19px;
-  font-weight: bold;
-  letter-spacing: 4px;
-}
-.status {
-  color: #999;
-  font-size: 11px;
-  letter-spacing: 2px;
-}
-main {
-  width: min(1100px, 90%);
-  margin: 55px auto;
-}
-h1 {
-  font-size: clamp(25px, 5vw, 42px);
-  letter-spacing: 5px;
-  margin: 0 0 10px;
-}
-.subtitle {
-  color: var(--muted);
-  font-size: 12px;
-  letter-spacing: 2px;
-  margin-bottom: 35px;
-}
-.layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 25px;
-}
-.panel {
-  border: 1px solid var(--line);
-  background: var(--panel);
-  padding: 22px;
-}
-.panel-title {
-  font-size: 12px;
-  letter-spacing: 3px;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 15px;
-  margin-bottom: 20px;
-}
-label {
-  display: block;
-  color: #999;
-  font-size: 11px;
-  letter-spacing: 2px;
-  margin: 17px 0 8px;
-}
-input, textarea {
-  width: 100%;
-  background: #050505;
-  border: 1px solid #333;
-  color: white;
-  padding: 13px;
-  outline: none;
-  border-radius: 0;
-  font: 13px "Courier New", monospace;
-}
-input:focus, textarea:focus { border-color: #aaa; }
-textarea {
-  min-height: 300px;
-  resize: vertical;
-  line-height: 1.6;
-}
-button {
-  background: white;
-  color: black;
-  border: 1px solid white;
-  padding: 12px 18px;
-  font: bold 11px "Courier New", monospace;
-  letter-spacing: 2px;
-  cursor: pointer;
-}
-button:hover {
-  background: black;
-  color: white;
-}
-button.secondary {
-  background: transparent;
-  color: white;
-  border-color: #444;
-}
-button.secondary:hover {
-  border-color: white;
-}
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 17px;
-}
-#message {
-  min-height: 20px;
-  color: #aaa;
-  font-size: 12px;
-  margin-top: 15px;
-  overflow-wrap: anywhere;
-}
-.paste-item {
-  border-bottom: 1px solid var(--line);
-  padding: 13px 0;
-}
-.paste-title {
-  font-size: 13px;
-  overflow-wrap: anywhere;
-  margin-bottom: 8px;
-}
-.paste-meta {
-  color: var(--muted);
-  font-size: 10px;
-  margin-bottom: 10px;
-}
-.paste-actions {
-  display: flex;
-  gap: 7px;
-  flex-wrap: wrap;
-}
-.paste-actions button {
-  padding: 7px 9px;
-  font-size: 10px;
-}
-.empty {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.8;
-}
-footer {
-  border-top: 1px solid var(--line);
-  padding: 22px 5%;
-  color: #555;
-  font-size: 10px;
-  letter-spacing: 2px;
-  margin-top: 70px;
-}
-@media(max-width: 760px) {
-  .layout { grid-template-columns: 1fr; }
-  main { margin-top: 35px; }
-  header { padding: 0 5%; }
-}
+*{box-sizing:border-box}
+body{margin:0;background:#050505;color:#eee;font:14px monospace}
+header{padding:24px 5%;border-bottom:1px solid #292929;letter-spacing:5px;font-size:20px}
+main{width:90%;max-width:1100px;margin:55px auto}
+h1{letter-spacing:5px;font-size:34px}
+.sub,.muted{color:#777;font-size:11px;letter-spacing:2px}
+.layout{display:grid;grid-template-columns:1fr 300px;gap:22px;margin-top:35px}
+.panel{background:#0b0b0b;border:1px solid #292929;padding:22px;min-width:0}
+.pt{border-bottom:1px solid #292929;padding-bottom:15px;margin-bottom:20px}
+label{display:block;color:#888;margin:17px 0 8px;font-size:11px}
+input,textarea{width:100%;padding:13px;background:#050505;color:#eee;border:1px solid #333;font:13px monospace}
+textarea{min-height:300px;resize:vertical}
+button{padding:11px 14px;background:#eee;color:#050505;border:1px solid #eee;font:bold 11px monospace;cursor:pointer}
+button:hover{background:#050505;color:#eee}
+.alt{background:transparent;color:#eee;border-color:#444}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+#message{color:#aaa;margin-top:15px;font-size:11px;overflow-wrap:anywhere}
+.item{padding:13px 0;border-bottom:1px solid #292929}
+.item-title{overflow-wrap:anywhere;margin-bottom:7px}
+.meta{color:#777;font-size:10px}
+.item-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.item-actions button{padding:7px 9px}
+.empty{color:#777;font-size:12px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6}
+a{color:white}
+@media(max-width:750px){.layout{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header>
-  <div class="logo">IRONWALL</div>
-  <div class="status">PASTE SERVICE // ONLINE</div>
-</header>
-
+<header>IRONWALL</header>
 <main>
-  <h1>PASTE STORAGE</h1>
-  <div class="subtitle">CREATE // STORE // SHARE // RAW</div>
+<h1>PASTE STORAGE</h1>
+<div class="sub">CREATE // STORE // SHARE // RAW</div>
 
-  <div class="layout">
-    <section class="panel">
-      <div class="panel-title">NEW PASTE</div>
+<div class="layout">
+<section class="panel">
+<div class="pt">PASTE EDITOR</div>
+<label>TITLE</label>
+<input id="title" maxlength="160" placeholder="Untitled">
+<label>CONTENT</label>
+<textarea id="content" placeholder="Enter your text..."></textarea>
+<div class="actions">
+<button id="save">SAVE PASTE</button>
+<button class="alt" id="new">NEW</button>
+</div>
+<div id="message"></div>
+</section>
 
-      <label for="pasteTitle">TITLE</label>
-      <input id="pasteTitle" maxlength="160" placeholder="Untitled">
-
-      <label for="pasteContent">CONTENT</label>
-      <textarea id="pasteContent" placeholder="Enter your text here..."></textarea>
-
-      <div class="actions">
-        <button id="saveButton" type="button">SAVE PASTE</button>
-        <button id="newButton" class="secondary" type="button">NEW</button>
-      </div>
-
-      <div id="message" role="status"></div>
-    </section>
-
-    <aside class="panel">
-      <div class="panel-title">RECENT PASTES</div>
-      <div id="pasteList">
-        <div class="empty">Loading pastes...</div>
-      </div>
-      <div class="actions">
-        <button id="refreshButton" class="secondary" type="button">REFRESH</button>
-      </div>
-    </aside>
-  </div>
+<aside class="panel">
+<div class="pt">RECENT PASTES</div>
+<div id="list"><div class="empty">Loading...</div></div>
+<div class="actions"><button class="alt" id="refresh">REFRESH</button></div>
+</aside>
+</div>
 </main>
 
-<footer>IRONWALL // PRIVATE TEXT STORAGE</footer>
-
 <script>
-const API = "https://pastebin.lvlyvcbcla.workers.dev/";
+const API="https://pastebin.lvlyvcbcla.workers.dev";
+const $=id=>document.getElementById(id);
+let currentId=null;
 
-const titleInput = document.getElementById("pasteTitle");
-const contentInput = document.getElementById("pasteContent");
-const message = document.getElementById("message");
-const pasteList = document.getElementById("pasteList");
-const saveButton = document.getElementById("saveButton");
+async function request(path,options={}){
+ const response=await fetch(API+path,{
+  ...options,
+  headers:{
+   ...(options.body?{"Content-Type":"application/json"}:{}),
+   ...options.headers
+  }
+ });
+ const text=await response.text();
+ let data;
+ try{data=text?JSON.parse(text):{}}
+ catch{throw new Error("Invalid response from Worker")}
+ if(!response.ok)throw new Error(data.error||"HTTP "+response.status);
+ return data;
+}
 
-let currentPasteId = null;
+function say(text){$("message").textContent=text}
+function reset(){
+ currentId=null;
+ $("title").value="";
+ $("content").value="";
+ say("");
+}
 
-async function apiRequest(path, options = {}) {
-  const response = await fetch(API + path, {
-    ...options,
-    headers: {
-      ...(options.body ? { "Content-Type": "application/json" } : {}),
-      ...(options.headers || {})
-    }
+async function save(){
+ const content=$("content").value;
+ if(!content.trim()){say("ERROR: Empty paste");return}
+ const btn=$("save");
+ btn.disabled=true;
+ btn.textContent="SAVING...";
+ try{
+  const result=await request("/api/pastes",{
+   method:"POST",
+   body:JSON.stringify({
+    id:currentId,
+    title:$("title").value.trim()||"Untitled",
+    content
+   })
   });
+  currentId=result.id;
+  say("SAVED: "+result.id+" | RAW: "+result.raw);
+  await load();
+ }catch(e){say("SAVE ERROR: "+e.message)}
+ finally{btn.disabled=false;btn.textContent="SAVE PASTE"}
+}
 
-  const text = await response.text();
-  let data;
+function action(label,callback){
+ const b=document.createElement("button");
+ b.className="alt";
+ b.textContent=label;
+ b.onclick=callback;
+ return b;
+}
 
-  try {
-    data = text ? JSON.parse(text) : {};
-  } catch {
-    throw new Error("Worker returned an invalid response");
+async function load(){
+ $("list").replaceChildren();
+ try{
+  const pastes=await request("/api/pastes");
+  if(!pastes.length){
+   const e=document.createElement("div");
+   e.className="empty";
+   e.textContent="No pastes stored.";
+   $("list").append(e);
+   return;
   }
+  for(const p of pastes){
+   const item=document.createElement("div");
+   item.className="item";
+   const name=document.createElement("div");
+   name.className="item-title";
+   name.textContent=p.title||"Untitled";
+   const meta=document.createElement("div");
+   meta.className="meta";
+   meta.textContent="ID: "+p.id;
+   const actions=document.createElement("div");
+   actions.className="item-actions";
 
-  if (!response.ok) {
-    throw new Error(data.error || "HTTP " + response.status);
+   actions.append(action("EDIT",()=>{
+    currentId=p.id;
+    $("title").value=p.title||"";
+    $("content").value=p.content||"";
+    say("Editing: "+p.id);
+    window.scrollTo({top:0,behavior:"smooth"});
+   }));
+
+   actions.append(action("VIEW",()=>{
+    location.href=API+"/p/"+encodeURIComponent(p.id);
+   }));
+
+   actions.append(action("RAW",()=>{
+    window.open(API+"/raw/"+encodeURIComponent(p.id),"_blank","noopener");
+   }));
+
+   actions.append(action("DELETE",async()=>{
+    if(!confirm("Delete this paste permanently?"))return;
+    try{
+     await request("/api/pastes/"+encodeURIComponent(p.id),{method:"DELETE"});
+     if(currentId===p.id)reset();
+     say("Deleted.");
+     await load();
+    }catch(e){say("DELETE ERROR: "+e.message)}
+   }));
+
+   item.append(name,meta,actions);
+   $("list").append(item);
   }
-
-  return data;
+ }catch(e){
+  const err=document.createElement("div");
+  err.className="empty";
+  err.textContent="LOAD ERROR: "+e.message;
+  $("list").append(err);
+ }
 }
 
-function showMessage(text) {
-  message.textContent = text;
-}
+$("save").onclick=save;
+$("new").onclick=reset;
+$("refresh").onclick=load;
 
-function clearEditor() {
-  currentPasteId = null;
-  titleInput.value = "";
-  contentInput.value = "";
-  showMessage("");
-}
-
-async function savePaste() {
-  const title = titleInput.value.trim() || "Untitled";
-  const content = contentInput.value;
-
-  if (!content.trim()) {
-    showMessage("ERROR: Paste content is empty.");
-    return;
-  }
-
-  saveButton.disabled = true;
-  saveButton.textContent = "SAVING...";
-  showMessage("Connecting to storage...");
-
-  try {
-    const result = await apiRequest("/api/pastes", {
-      method: "POST",
-      body: JSON.stringify({
-        id: currentPasteId,
-        title,
-        content
-      })
-    });
-
-    currentPasteId = result.id;
-    showMessage("SAVED: " + result.id + " | RAW: " + result.raw);
-    await loadPastes();
-  } catch (error) {
-    showMessage("SAVE ERROR: " + error.message);
-  } finally {
-    saveButton.disabled = false;
-    saveButton.textContent = "SAVE PASTE";
-  }
-}
-
-function makeButton(label, action, secondary = true) {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.textContent = label;
-  if (secondary) button.className = "secondary";
-  button.addEventListener("click", action);
-  return button;
-}
-
-async function loadPastes() {
-  pasteList.replaceChildren();
-
-  try {
-    const pastes = await apiRequest("/api/pastes");
-
-    if (!Array.isArray(pastes) || pastes.length === 0) {
-      const empty = document.createElement("div");
-      empty.className = "empty";
-      empty.textContent = "No pastes stored.";
-      pasteList.appendChild(empty);
-      return;
-    }
-
-    for (const paste of pastes) {
-      const item = document.createElement("div");
-      item.className = "paste-item";
-
-      const title = document.createElement("div");
-      title.className = "paste-title";
-      title.textContent = paste.title || "Untitled";
-
-      const meta = document.createElement("div");
-      meta.className = "paste-meta";
-      meta.textContent = "ID: " + paste.id;
-
-      const actions = document.createElement("div");
-      actions.className = "paste-actions";
-
-      actions.appendChild(makeButton("OPEN", () => {
-        currentPasteId = paste.id;
-        titleInput.value = paste.title || "";
-        contentInput.value = paste.content || "";
-        showMessage("Loaded paste: " + paste.id);
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }));
-
-      actions.appendChild(makeButton("RAW", () => {
-        window.open(API + "/raw/" + encodeURIComponent(paste.id), "_blank", "noopener");
-      }));
-
-      actions.appendChild(makeButton("DELETE", async () => {
-        if (!confirm("Delete this paste permanently?")) return;
-
-        try {
-          await apiRequest("/api/pastes/" + encodeURIComponent(paste.id), {
-            method: "DELETE"
-          });
-
-          if (currentPasteId === paste.id) clearEditor();
-
-          showMessage("Paste deleted.");
-          await loadPastes();
-        } catch (error) {
-          showMessage("DELETE ERROR: " + error.message);
-        }
-      }));
-
-      item.append(title, meta, actions);
-      pasteList.appendChild(item);
-    }
-  } catch (error) {
-    const failed = document.createElement("div");
-    failed.className = "empty";
-    failed.textContent = "LOAD ERROR: " + error.message;
-    pasteList.appendChild(failed);
-  }
-}
-
-saveButton.addEventListener("click", savePaste);
-document.getElementById("newButton").addEventListener("click", clearEditor);
-document.getElementById("refreshButton").addEventListener("click", loadPastes);
-
-loadPastes();
+load();
 </script>
 </body>
 </html>
