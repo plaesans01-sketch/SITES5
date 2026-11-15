@@ -14,8 +14,8 @@ from discord.ext import commands
 from discord import app_commands
 
 
-APP_BOT_TOKEN = "MTUzODg3MTU0ODgyMjE1OTQ2MQ.GHu7yS.2jyrFziIgU_aTxe9taDp2ai0CfDSBH5iIamJiM"
-VERIFY_BOT_TOKEN = "MTU1ODkyNTc0MDE1MjQ1OTQxNQ.Gif0lQ.EZUgZzGBRukU81QGkm7aDGN1RaMuyN-uCVEeMc"
+APP_BOT_TOKEN = ""
+VERIFY_BOT_TOKEN = ""
 ADMIN_ID = 1313917298490216523
 
 
